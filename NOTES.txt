@@ -1,0 +1,19 @@
+*************************************************** Beg TODO List ***************************************************
+Title Screen:
+	Play Button on title screen goes to mode-select
+	Background video
+
+Settings:
+	Everything
+s
+Mode Select:
+	Mode select has a choose save file button, new save button
+	Choose from difficulties of Easy, Normal, Experienced, and Insane | (Modifies shop ratios and money dropped)
+	Show modifiers of the difficulty(gold dropped, etc.) somewhere on the screen as you hover over them
+	Choose from game type of Normal, Endless, and (add more if i can think of more)
+
+Ingame Menu:
+	Textures for World 1+
+	Shop Menu
+	Rebith with right and left arrows to adjust difficulty
+*************************************************** End TODO List ***************************************************
