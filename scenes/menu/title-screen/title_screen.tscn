@@ -1,0 +1,81 @@
+[gd_scene load_steps=4 format=3 uid="uid://30kmdsbphw3t"]
+
+[ext_resource type="Script" path="res://scenes/menu/title-screen/title_screen.gd" id="1_7jq6w"]
+[ext_resource type="LabelSettings" uid="uid://bj8v41op6pha2" path="res://assets/labels/title_text.tres" id="2_72h3b"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_c3nik"]
+font_size = 20
+
+[node name="Title Screen" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_7jq6w")
+
+[node name="TODO - gameplay vid" type="VideoStreamPlayer" parent="."]
+layout_mode = 2
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 3.0
+offset_right = -1152.0
+offset_bottom = -645.0
+
+[node name="Menu Text" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.001
+anchor_top = 0.284
+anchor_right = 1.0
+anchor_bottom = 0.75
+offset_left = -0.152
+offset_top = -0.0320129
+offset_right = 2.0
+offset_bottom = 2.99997
+
+[node name="Title & Caption" type="VBoxContainer" parent="Menu Text"]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="Menu Text/Title & Caption"]
+layout_mode = 2
+text = "TITLE GOES HERE"
+label_settings = ExtResource("2_72h3b")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Caption" type="Label" parent="Menu Text/Title & Caption"]
+layout_mode = 2
+text = "Caption here"
+label_settings = SubResource("LabelSettings_c3nik")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Spacer" type="Label" parent="Menu Text/Title & Caption"]
+layout_mode = 2
+text = "
+
+
+"
+
+[node name="Buttons" type="VBoxContainer" parent="Menu Text"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 8
+
+[node name="Play" type="Button" parent="Menu Text/Buttons"]
+layout_mode = 2
+text = "            PLAY            "
+
+[node name="Settings" type="Button" parent="Menu Text/Buttons"]
+layout_mode = 2
+text = "SETTINGS"
+
+[node name="Quit" type="Button" parent="Menu Text/Buttons"]
+layout_mode = 2
+text = "QUIT"
+
+[connection signal="pressed" from="Menu Text/Buttons/Play" to="." method="_on_play_pressed"]
+[connection signal="pressed" from="Menu Text/Buttons/Settings" to="." method="_on_settings_pressed"]
+[connection signal="pressed" from="Menu Text/Buttons/Quit" to="." method="_on_quit_pressed"]
