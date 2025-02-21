@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://dkxfwxe22gsey"]
+[gd_scene load_steps=3 format=3 uid="uid://dkxfwxe22gsey"]
 
-[ext_resource type="LabelSettings" uid="uid://bfwwd276fjc2d" path="res://assets/labels/header1_text.tres" id="1_fdugg"]
+[ext_resource type="Theme" uid="uid://chmrclfq0gybd" path="res://assets/themes/default_theme.tres" id="1_lof54"]
+[ext_resource type="LabelSettings" uid="uid://bfwwd276fjc2d" path="res://assets/labels/header1_text.tres" id="1_ml0pp"]
 
 [node name="Mode Select" type="Control"]
 layout_mode = 3
@@ -9,6 +10,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme = ExtResource("1_lof54")
 
 [node name="World Select Menu BG-Tex" type="TextureRect" parent="."]
 layout_mode = 1
@@ -87,7 +89,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 text = "Open Shop"
-label_settings = ExtResource("1_fdugg")
+label_settings = ExtResource("1_ml0pp")
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -112,7 +114,7 @@ offset_right = 3.05176e-05
 grow_horizontal = 2
 grow_vertical = 2
 text = "Rebirth"
-label_settings = ExtResource("1_fdugg")
+label_settings = ExtResource("1_ml0pp")
 horizontal_alignment = 1
 vertical_alignment = 1
 

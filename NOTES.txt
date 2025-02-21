@@ -11,9 +11,19 @@ Mode Select:
 	Choose from difficulties of Easy, Normal, Experienced, and Insane | (Modifies shop ratios and money dropped)
 	Show modifiers of the difficulty(gold dropped, etc.) somewhere on the screen as you hover over them
 	Choose from game type of Normal, Endless, and (add more if i can think of more)
+	
+	left side = scroll box of saves, at the top it says add new save
+	top of right side = png of preview of save file
+	middle = description of save file: difficulty, etc.
+	very bottom of right side = play button
 
-Ingame Menu:
-	Textures for World 1+
-	Shop Menu
-	Rebith with right and left arrows to adjust difficulty
+Inventory Menu:
+	Items in inventory, loadout, etc.
+	* = Only allowed when not currently in a round
+	*Shop Menu
+	*Rebith Menu with right and left arrows to adjust difficulty
+	
+	
+Towers:
+	add a difficulty or setting parameter to the class that will scale stats
 *************************************************** End TODO List ***************************************************
