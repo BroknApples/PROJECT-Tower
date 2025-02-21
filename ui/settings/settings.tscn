@@ -1,0 +1,49 @@
+[gd_scene load_steps=3 format=3 uid="uid://71dowuc8cyfy"]
+
+[ext_resource type="Script" path="res://ui/settings/settings.gd" id="1_cahr5"]
+[ext_resource type="PackedScene" uid="uid://dysdlmqfunedm" path="res://ui/settings/input_button.tscn" id="2_mhvg2"]
+
+[node name="Settings" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.998791, 1)
+script = ExtResource("1_cahr5")
+
+[node name="PanelContainer" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -450.0
+offset_top = -223.0
+offset_right = 450.0
+offset_bottom = 223.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="PanelContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 7
+theme_override_constants/margin_top = 7
+theme_override_constants/margin_right = 7
+theme_override_constants/margin_bottom = 7
+
+[node name="Input Settings VBox" type="VBoxContainer" parent="PanelContainer/MarginContainer"]
+layout_mode = 2
+
+[node name="ScrollContainer" type="ScrollContainer" parent="PanelContainer/MarginContainer/Input Settings VBox"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Action List" type="VBoxContainer" parent="PanelContainer/MarginContainer/Input Settings VBox/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label Button" parent="PanelContainer/MarginContainer/Input Settings VBox/ScrollContainer/Action List" instance=ExtResource("2_mhvg2")]
+layout_mode = 2

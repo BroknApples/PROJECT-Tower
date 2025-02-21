@@ -1,7 +1,7 @@
 [gd_scene load_steps=5 format=3 uid="uid://dk0hpych5mxdr"]
 
 [ext_resource type="Theme" uid="uid://chmrclfq0gybd" path="res://assets/themes/default_theme.tres" id="1_asj4n"]
-[ext_resource type="Script" path="res://scenes/menu/mode-select/mode_select.gd" id="1_fffou"]
+[ext_resource type="Script" path="res://ui/mode-select/choose-save.gd" id="1_fffou"]
 
 [sub_resource type="Gradient" id="Gradient_0ssfk"]
 
