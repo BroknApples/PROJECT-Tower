@@ -1,0 +1,133 @@
+[gd_scene load_steps=5 format=3 uid="uid://hpt34cnegjrm"]
+
+[ext_resource type="Theme" uid="uid://chmrclfq0gybd" path="res://assets/themes/default_theme.tres" id="1_v36el"]
+[ext_resource type="Script" path="res://ui/title-screen/save_select_menu.gd" id="2_x7cfe"]
+
+[sub_resource type="Gradient" id="Gradient_0ssfk"]
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_26c0y"]
+resource_name = "Temporary Texture"
+gradient = SubResource("Gradient_0ssfk")
+width = 135
+height = 240
+
+[node name="SaveSelectMenu PanelContainer" type="PanelContainer"]
+custom_minimum_size = Vector2(1650, 0)
+anchors_preset = -1
+anchor_left = 0.083
+anchor_top = 0.099
+anchor_right = 0.917
+anchor_bottom = 0.889
+offset_left = 0.383987
+offset_top = -0.152008
+offset_right = -0.384033
+offset_bottom = 0.64801
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_v36el")
+script = ExtResource("2_x7cfe")
+metadata/_edit_use_anchors_ = true
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="ScrollContainer" type="ScrollContainer" parent="HBoxContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 400)
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+vertical_scroll_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/VBoxContainer/ScrollContainer"]
+layout_mode = 2
+
+[node name="NewSave MarginContainer" type="MarginContainer" parent="HBoxContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 5
+
+[node name="NewSave Button" type="Button" parent="HBoxContainer/VBoxContainer/NewSave MarginContainer"]
+custom_minimum_size = Vector2(240, 100)
+layout_mode = 2
+text = "New Save"
+
+[node name="SaveDescription MarginContainer" type="PanelContainer" parent="HBoxContainer"]
+custom_minimum_size = Vector2(525, 0)
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/SaveDescription MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="PanelContainer" type="PanelContainer" parent="HBoxContainer/SaveDescription MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 200)
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer/SaveDescription MarginContainer/VBoxContainer/PanelContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 40
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 40
+theme_override_constants/margin_bottom = 0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/SaveDescription MarginContainer/VBoxContainer/PanelContainer/MarginContainer"]
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="HBoxContainer/SaveDescription MarginContainer/VBoxContainer/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+texture = SubResource("GradientTexture2D_26c0y")
+
+[node name="Spacer" type="Control" parent="HBoxContainer/SaveDescription MarginContainer/VBoxContainer/PanelContainer/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 8)
+layout_mode = 2
+
+[node name="SelectedSave Label" type="Label" parent="HBoxContainer/SaveDescription MarginContainer/VBoxContainer/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Spacer2" type="Control" parent="HBoxContainer/SaveDescription MarginContainer/VBoxContainer/PanelContainer/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer/SaveDescription MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 5
+
+[node name="RichTextLabel" type="RichTextLabel" parent="HBoxContainer/SaveDescription MarginContainer/VBoxContainer/MarginContainer"]
+custom_minimum_size = Vector2(250, 390)
+layout_mode = 2
+theme = ExtResource("1_v36el")
+text = "Hello, this is the description of the save file...
+Show difficulty, hours played, current coins,
+num upgrades obtained,
+highest world + prestige,
+etc.
+...
+...
+...
+"
+
+[node name="MarginContainer2" type="MarginContainer" parent="HBoxContainer/SaveDescription MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="StartGame Button" type="Button" parent="HBoxContainer/SaveDescription MarginContainer/VBoxContainer/MarginContainer2"]
+custom_minimum_size = Vector2(0, 60)
+layout_mode = 2
+text = "Start Game
+"
+
+[connection signal="pressed" from="HBoxContainer/SaveDescription MarginContainer/VBoxContainer/MarginContainer2/StartGame Button" to="." method="_on_start_game_button_pressed"]

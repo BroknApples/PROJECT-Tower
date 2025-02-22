@@ -1,8 +1,10 @@
 extends Control
 
+@onready var quit_menu = $"QuitMenu PanelContainer"
+@onready var save_select_menu = $"SaveSelectMenu PanelContainer"
 
 func _on_play_pressed() -> void:
-	get_tree().change_scene_to_file("res://ui/mode-select/choose-save.tscn")
+	save_select_menu.visible = true
 
 
 func _on_settings_pressed() -> void:
@@ -10,4 +12,4 @@ func _on_settings_pressed() -> void:
 
 
 func _on_quit_pressed() -> void:
-	get_tree().quit()
+	quit_menu.visible = true

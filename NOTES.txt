@@ -27,3 +27,35 @@ Inventory Menu:
 Towers:
 	add a difficulty or setting parameter to the class that will scale stats
 *************************************************** End TODO List ***************************************************
+
+
+Architecure of GameLoop:
+	Game:
+		Players:
+			Player1:
+				Tower Component:
+					Weapons:
+						upgrades, etc.
+					Your center tower with the hp and stuff
+				Buildable Components:
+					All the little objects you place around the tower and stuff
+				PlayerWeapon:
+					Upgrades, etc.
+					weapon the player ALWAYS has
+				Upgrades:
+					upgrad
+				The player object itself will hold your gold and xp and all that
+		Enemies:
+			dynamically add enemies that do their own ai scripts
+		CurrentWorld:
+			holds the data for the current world(enemies and the textures for the bg and stuff)
+
+TODO: 
+Every time the user will be prompted with a choice of weapon upgrade, just loop through
+all the weapon categories attached to a player and put in list, then choose some random options from list
+that player can choose from.
+Game/Players/CurrentPlayer/:
+	TowerComponent: upgrades
+	TowerComponent Weapons: upgrades
+	PlayerWeapon: upgrades
+	etc.
