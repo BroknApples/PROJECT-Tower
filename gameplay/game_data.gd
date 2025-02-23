@@ -35,7 +35,7 @@ func loadSaveData() -> bool:
 	
 	# TODO: load from save file, not from preset variables
 	
-	current_world = load("res://gameplay/levels/TestWorld.tscn").instantiate()
+	current_world = load("res://gameplay/levels/test_world.tscn").instantiate()
 	add_child(current_world)
 	
 	player_type = load("res://game_objects/player/player.tscn").instantiate()

@@ -1,12 +1,8 @@
-[gd_scene load_steps=5 format=3 uid="uid://dgn1g3gqf2nbr"]
+[gd_scene load_steps=4 format=3 uid="uid://dgn1g3gqf2nbr"]
 
 [ext_resource type="Script" path="res://game_objects/player/towers/tower_class.gd" id="1_m66hm"]
 [ext_resource type="Shape2D" uid="uid://t3nwrvfhcfpd" path="res://assets/collision_shapes/tower_hitbox_circle.tres" id="2_5rgli"]
-
-[sub_resource type="Gradient" id="Gradient_1dnbu"]
-
-[sub_resource type="GradientTexture1D" id="GradientTexture1D_0xi1q"]
-gradient = SubResource("Gradient_1dnbu")
+[ext_resource type="Texture2D" uid="uid://cgqn8qfkl5x3x" path="res://assets/textures/towers/placeholder_tower.png" id="3_0t6c5"]
 
 [node name="Tower" type="Node2D"]
 script = ExtResource("1_m66hm")
@@ -17,5 +13,5 @@ script = ExtResource("1_m66hm")
 shape = ExtResource("2_5rgli")
 
 [node name="Sprite2D" type="Sprite2D" parent="StaticBody2D"]
-scale = Vector2(0.304688, 62)
-texture = SubResource("GradientTexture1D_0xi1q")
+scale = Vector2(0.2, 0.2)
+texture = ExtResource("3_0t6c5")

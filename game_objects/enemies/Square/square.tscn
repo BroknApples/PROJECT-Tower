@@ -1,0 +1,20 @@
+[gd_scene load_steps=4 format=3 uid="uid://boyh5nu8re417"]
+
+[ext_resource type="Script" path="res://game_objects/enemies/Square/square.gd" id="1_4g0x3"]
+[ext_resource type="Shape2D" uid="uid://t3nwrvfhcfpd" path="res://assets/collision_shapes/tower_hitbox_circle.tres" id="2_mas76"]
+
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_711k3"]
+size = Vector2(100, 100)
+
+[node name="Square" type="Node2D"]
+script = ExtResource("1_4g0x3")
+
+[node name="RigidBody2D" type="RigidBody2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RigidBody2D"]
+scale = Vector2(1, 1)
+shape = ExtResource("2_mas76")
+
+[node name="Sprite2D" type="Sprite2D" parent="RigidBody2D"]
+scale = Vector2(0.2, 0.2)
+texture = SubResource("PlaceholderTexture2D_711k3")
