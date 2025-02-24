@@ -54,3 +54,7 @@ func findNearestAttackable() -> Vector2:
 			closest_tower_pos = player.global_position
 
 	return closest_tower_pos
+
+func defaultPhysicsProcess(delta: float):
+	var direction = (findNearestAttackable() - $RigidBody2D.global_position).normalized()
+	$RigidBody2D.add_constant_force(direction * movement_speed, Vector2.ZERO)
