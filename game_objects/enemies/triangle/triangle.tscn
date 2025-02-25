@@ -1,3 +1,21 @@
-[gd_scene format=3 uid="uid://ba1l6gejs4mdc"]
+[gd_scene load_steps=3 format=3 uid="uid://ba1l6gejs4mdc"]
+
+[ext_resource type="Script" path="res://game_objects/enemies/triangle/triangle.gd" id="1_dkcfu"]
+
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_bjf44"]
+size = Vector2(100, 100)
 
 [node name="Triangle" type="Node2D"]
+script = ExtResource("1_dkcfu")
+
+[node name="RigidBody2D" type="RigidBody2D" parent="."]
+max_contacts_reported = 15
+
+[node name="Polygon2D" type="Polygon2D" parent="RigidBody2D"]
+scale = Vector2(0.666667, 0.75)
+texture = SubResource("PlaceholderTexture2D_bjf44")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="RigidBody2D"]
+polygon = PackedVector2Array(0, 0, 0, 0, 0, 0)
+
+[connection signal="body_entered" from="RigidBody2D" to="." method="_on_rigid_body_2d_body_entered"]

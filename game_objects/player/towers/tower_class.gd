@@ -39,3 +39,6 @@ func _process(delta: float):
 # TODO: Add upgrades
 # func getUpgrades() -> Array[Upgrade]:
 # 	return upgrades
+
+func takeDamage(attacker: Enemy):
+	print("I took damage from EnemyType: '" + attacker.enemy_type + "'")

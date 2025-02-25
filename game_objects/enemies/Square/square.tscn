@@ -1,20 +1,21 @@
-[gd_scene load_steps=4 format=3 uid="uid://boyh5nu8re417"]
+[gd_scene load_steps=3 format=3 uid="uid://boyh5nu8re417"]
 
 [ext_resource type="Script" path="res://game_objects/enemies/Square/square.gd" id="1_4g0x3"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_ge7v0"]
-
-[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_711k3"]
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_ciw4n"]
 size = Vector2(100, 100)
 
 [node name="Square" type="Node2D"]
 script = ExtResource("1_4g0x3")
 
 [node name="RigidBody2D" type="RigidBody2D" parent="."]
+max_contacts_reported = 15
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="RigidBody2D"]
-shape = SubResource("RectangleShape2D_ge7v0")
+[node name="Polygon2D" type="Polygon2D" parent="RigidBody2D"]
+scale = Vector2(0.666667, 0.75)
+texture = SubResource("PlaceholderTexture2D_ciw4n")
 
-[node name="Sprite2D" type="Sprite2D" parent="RigidBody2D"]
-scale = Vector2(0.2, 0.2)
-texture = SubResource("PlaceholderTexture2D_711k3")
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="RigidBody2D"]
+polygon = PackedVector2Array(0, 0, 0, 0, 0, 0)
+
+[connection signal="body_entered" from="RigidBody2D" to="." method="_on_rigid_body_2d_body_entered"]
