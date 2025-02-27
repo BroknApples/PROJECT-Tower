@@ -1,4 +1,16 @@
 extends Enemy
+##
+## Triangle : extends EnemyClass
+## 
+## This enemy is fast, but does low damage
+##
+
+
+func _init() -> void:
+	# Enemy stats
+	enemy_type = "Square"
+	super._init(10.0, 2.0, 25.0)
+
 
 func _ready():
 	super._ready()
@@ -21,19 +33,7 @@ func _ready():
 	polygon.polygon = vertices
 	polygon.color = Color.RED
 	collider.polygon = vertices
-	
-	# Enemy stats
-	enemy_type = "Square"
-	hp = 10.0
-	damage = 2.0
-	movement_speed = 25.0
 
 
 func _physics_process(delta: float) -> void:
 	defaultPhysicsProcess(delta)
-
-
-func _on_rigid_body_2d_body_entered(body: Node) -> void:
-	if body is StaticBody2D:
-		body.get_parent().takeDamage(self)
-		queue_free()

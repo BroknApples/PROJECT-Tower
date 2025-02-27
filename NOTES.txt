@@ -1,56 +1,14 @@
-*************************************************** Beg TODO List ***************************************************
-Title Screen:
-	Play Button on title screen goes to mode-select
-	Background video
+************************** beg NAMING CONVENTION **************************
+Variables: snake_caase
+Functions: camelCase
+Classes: PascalCase
+Initializing member variables through function call: prefix with init_
+************************** end NAMING CONVENTION **************************
 
-Settings:
-	Everything
-s
-Mode Select:
-	Mode select has a choose save file button, new save button
-	Choose from difficulties of Easy, Normal, Experienced, and Insane | (Modifies shop ratios and money dropped)
-	Show modifiers of the difficulty(gold dropped, etc.) somewhere on the screen as you hover over them
-	Choose from game type of Normal, Endless, and (add more if i can think of more)
-	
-	left side = scroll box of saves, at the top it says add new save
-	top of right side = png of preview of save file
-	middle = description of save file: difficulty, etc.
-	very bottom of right side = play button
-
-Inventory Menu:
-	Items in inventory, loadout, etc.
-	* = Only allowed when not currently in a round
-	*Shop Menu
-	*Rebith Menu with right and left arrows to adjust difficulty
-	
-	
-Towers:
-	add a difficulty or setting parameter to the class that will scale stats
-*************************************************** End TODO List ***************************************************
+******************************** beg IDEAS ********************************
+Finished Player folder reformatting, do the rest
 
 
-Architecure of GameLoop:
-	Game:
-		Players:
-			Player1:
-				Tower Component:
-					Weapons:
-						upgrades, etc.
-					Your center tower with the hp and stuff
-				Buildable Components:
-					All the little objects you place around the tower and stuff
-				PlayerWeapon:
-					Upgrades, etc.
-					weapon the player ALWAYS has
-				Upgrades:
-					upgrad
-				The player object itself will hold your gold and xp and all that
-		Enemies:
-			dynamically add enemies that do their own ai scripts
-		CurrentWorld:
-			holds the data for the current world(enemies and the textures for the bg and stuff)
-
-TODO: 
 Every time the user will be prompted with a choice of weapon upgrade, just loop through
 all the weapon categories attached to a player and put in list, then choose some random options from list
 that player can choose from.
@@ -80,4 +38,4 @@ MAKE BLOCKS HAVE SPECIAL POWERS AND ELEMENTS OR SOMETHING:
 	SOME MIGHT DROP OBSTACLES/POWERUPS THAT CAN HELP OTHER BLOCKS
 		(enchanter block that doesnt hurt the player, but instead circles around the player
 		 whilst dropping powerups for other blocks)
-	
+******************************** end IDEAS ********************************

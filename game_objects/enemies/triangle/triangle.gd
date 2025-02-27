@@ -1,5 +1,15 @@
 extends Enemy
-# import math
+##
+## Triangle : extends EnemyClass
+## 
+## This enemy is fast, but does low damage
+##
+
+func _init() -> void:
+	# Enemy stats -- All have something to do with 3 lol cause triangle(I'm so funny(it's not funny))
+	enemy_type = "Triangle"
+	super._init(3, 1.33, 66.66)
+
 
 func _ready():
 	super._ready()
@@ -21,19 +31,7 @@ func _ready():
 	polygon.polygon = vertices
 	polygon.color = Color.BLUE
 	collider.polygon = vertices
-	
-	# Enemy stats -- All have something to do with 3 lol cause triangle(I'm so funny(it's not funny))
-	enemy_type = "Triangle"
-	hp = 3.33
-	damage = 1.33
-	movement_speed = 66.66
-	
+
 
 func _physics_process(delta: float) -> void:
 	defaultPhysicsProcess(delta)
-	
-
-func _on_rigid_body_2d_body_entered(body: Node) -> void:
-	if body is StaticBody2D:
-		body.get_parent().takeDamage(self)
-		queue_free()

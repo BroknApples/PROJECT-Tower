@@ -1,17 +1,47 @@
 extends Node
-
+##
+## Enemy Class
+##
+## Base class of all enemies, implements basic damage and attack functions
+##
 class_name Enemy
+
+
+## EnemyStats Class
+## enemy_type: Name of the enemy type
+## max_hp: Maximum health of the enemy
+## curr_hp: Current health of the enemy
+## damage: How much damage does it do to player objects
+## movement_speed: How fast does it move
+## armor: Reduces damage taken
+## hp_regen: How much health does it regenerate in a second
+class EnemyStats:
+	var max_hp: float
+	var curr_hp: float
+	var damage: float
+	var movement_speed: float
+	var armor: float ## DMG Reduction uses the formula from League of Legends: DMG Taken = ATK * 100 / (100 + Armor)
+	var hp_regen: float
+	
+	func _init(init_max_hp: float, init_damage:float, init_movement_speed: float) -> void:
+		self.max_hp = init_max_hp
+		self.damage = init_damage
+		self.movement_speed = init_movement_speed
+
 
 var rng = RandomNumberGenerator.new()
 
-# Enemy stats
-var hp: float
-var damage: float
-var movement_speed: float
-var enemy_type: String ## Initialized in child class init function
+# Tags
+var enemy_type: String ## Always initialized in child class init function
+
+# Stats
+var stats: EnemyStats
 
 
-# Called when the node enters the scene tree for the first time.
+func _init(init_max_hp, init_damage, init_movement_speed) -> void:
+	stats = EnemyStats.new(init_max_hp, init_damage, init_movement_speed)
+
+
 func _ready() -> void:
 	findSpawnPosition()
 	
@@ -19,13 +49,27 @@ func _ready() -> void:
 	var rigid_body = $RigidBody2D
 	rigid_body.set_contact_monitor(true)
 	rigid_body.max_contacts_reported = 25
+	
+	# Set collision detection function
+	rigid_body.body_entered.connect(_on_rigid_body_2d_body_entered)
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
+
 func _process(delta: float) -> void:
-	# Use this for game mechanics
-	pass
+	stats.curr_hp += delta * stats.hp_regen
 
 
+## Detect Collision
+func _on_rigid_body_2d_body_entered(body: Node) -> void:
+	# Always happens on collision
+	if body is StaticBody2D:
+		body.get_parent().takeDamage(self)
+		queue_free()
+	
+	# Do unique interactions on collision based on child declaration
+	doOnCollision(body)
+
+
+## Find a position off the screen to spawn a new enemy
 func findSpawnPosition() -> void:
 	var screen_size = get_tree().root.size  # Get screen size
 	
@@ -59,6 +103,7 @@ func findSpawnPosition() -> void:
 	$".".look_at(nearest_attackable)
 
 
+## Find the nearest object to attack
 func findNearestAttackable() -> Vector2:
 	var players = get_parent().get_parent().get_node("Players").get_children()
 
@@ -71,13 +116,14 @@ func findNearestAttackable() -> Vector2:
 	return closest_tower_pos
 
 
+## Default process for phyiscs simulation -> MOST enemies will use this
 func defaultPhysicsProcess(delta: float):
 	var enemy = $RigidBody2D
 	var nearest_attackable = findNearestAttackable()
 	
 	# Move towards position
 	var direction = (nearest_attackable - enemy.global_position).normalized()
-	enemy.apply_force(direction * movement_speed, Vector2.ZERO)
+	enemy.apply_force(direction * stats.movement_speed, Vector2.ZERO)
 	
 	# TODO: Rotate to angle
 	#const ROTATION_SPEED = 50.0
@@ -85,3 +131,7 @@ func defaultPhysicsProcess(delta: float):
 	#var angle_difference = fmod(target_angle - enemy.rotation + PI, 2 * PI) - PI
 	#var torque = angle_difference * ROTATION_SPEED
 	#enemy.apply_torque(torque)
+
+
+func doOnCollision(body: Node) -> void:
+	pass

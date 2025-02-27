@@ -1,4 +1,10 @@
 extends PanelContainer
+##
+## SaveSelectMenu UI
+##
+## Prompts user to select a previous save or create a new one
+##
+
 
 @onready var selected_save_label = $"HBoxContainer/SaveDescription MarginContainer/VBoxContainer/PanelContainer/MarginContainer/VBoxContainer/SelectedSave Label"
 const DEFAULT_SELECTED_SAVE_LABEL_TEXT = "None"
@@ -18,7 +24,8 @@ func _on_start_game_button_pressed() -> void:
 		get_tree().get_root().remove_child(game_scene)
 	else:
 		get_tree().get_root().remove_child($"..")
-	
+
+## Close the Save select menu when 'esc' is pressed
 func _input(event):
 	if Input.is_action_just_pressed("Esc"):
 		$".".visible = false
