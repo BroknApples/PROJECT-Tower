@@ -71,8 +71,6 @@ func _on_rigid_body_2d_body_entered(body: Node) -> void:
 
 ## Find a position off the screen to spawn a new enemy
 func findSpawnPosition() -> void:
-	var screen_size = get_tree().root.size  # Get screen size
-	
 	## Minimum amount of padding to create when spawning
 	## (prevents large objects from spawning on the screen)
 	const MIN_PADDING = 500
@@ -86,16 +84,16 @@ func findSpawnPosition() -> void:
 	match edge:
 		0:  # Left side
 			xPos = -rng.randi_range(MIN_PADDING, MAX_PADDING)
-			yPos = rng.randi_range(-MIN_PADDING, screen_size.y + MIN_PADDING)
+			yPos = rng.randi_range(-MIN_PADDING, Globals.screen_size.y + MIN_PADDING)
 		1:  # Right side
-			xPos = screen_size.x + rng.randi_range(MIN_PADDING, MAX_PADDING)
-			yPos = rng.randi_range(-MIN_PADDING, screen_size.y + MIN_PADDING)
+			xPos = Globals.screen_size.x + rng.randi_range(MIN_PADDING, MAX_PADDING)
+			yPos = rng.randi_range(-MIN_PADDING, Globals.screen_size.y + MIN_PADDING)
 		2:  # Top side
-			xPos = rng.randi_range(-MIN_PADDING, screen_size.x + MIN_PADDING)
+			xPos = rng.randi_range(-MIN_PADDING, Globals.screen_size.x + MIN_PADDING)
 			yPos = -rng.randi_range(MIN_PADDING, MAX_PADDING)
 		3:  # Bottom side
-			xPos = rng.randi_range(-MAX_PADDING, screen_size.x + MIN_PADDING)
-			yPos = screen_size.y + rng.randi_range(MIN_PADDING, MAX_PADDING)
+			xPos = rng.randi_range(-MAX_PADDING, Globals.screen_size.x + MIN_PADDING)
+			yPos = Globals.screen_size.y + rng.randi_range(MIN_PADDING, MAX_PADDING)
 	
 	$".".set_position(Vector2(xPos, yPos))
 	
@@ -107,10 +105,10 @@ func findSpawnPosition() -> void:
 func findNearestAttackable() -> Vector2:
 	var players = get_parent().get_parent().get_node("Players").get_children()
 
-	var closest_tower_pos = players[0].get_node("TowerClass").global_position
+	var closest_tower_pos = players[0].get_node("Tower").global_position
 	
 	for player in players:
-		if (player.get_node("TowerClass").global_position < closest_tower_pos):
+		if (player.get_node("Tower").global_position < closest_tower_pos):
 			closest_tower_pos = player.global_position
 
 	return closest_tower_pos

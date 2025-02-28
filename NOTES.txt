@@ -6,6 +6,10 @@ Initializing member variables through function call: prefix with init_
 ************************** end NAMING CONVENTION **************************
 
 ******************************** beg IDEAS ********************************
+Credts = default currency
+Cubes = currency to build things around the map(only some are permanent through upgrades, otherwise they can be destroyed
+		pretty easily and they cost so much to build, only able to realistically get like 10 at once)
+
 Finished Player folder reformatting, do the rest
 
 

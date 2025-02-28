@@ -1,0 +1,37 @@
+[gd_scene load_steps=7 format=3 uid="uid://bw8eiprkw6fiw"]
+
+[ext_resource type="Theme" uid="uid://bfl1mp070y7c7" path="res://assets/themes/player_ui.tres" id="1_woru6"]
+[ext_resource type="Script" path="res://ui/player/player_gui.gd" id="2_vex1p"]
+[ext_resource type="PackedScene" uid="uid://b1uf45rws371e" path="res://ui/player/world_data.tscn" id="3_ilkql"]
+[ext_resource type="PackedScene" uid="uid://bsthnme2sfrok" path="res://ui/player/health_bar.tscn" id="3_kxx7f"]
+[ext_resource type="PackedScene" uid="uid://bvdq14mgjbnue" path="res://ui/player/credits_and_cubes.tscn" id="4_03jqv"]
+[ext_resource type="PackedScene" uid="uid://dmmh2oprtxlhv" path="res://ui/player/save_data.tscn" id="6_u1qtg"]
+
+[node name="PlayerGui" type="Control"]
+top_level = true
+z_index = 1
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 0
+theme = ExtResource("1_woru6")
+script = ExtResource("2_vex1p")
+metadata/_edit_use_anchors_ = true
+
+[node name="WorldData" parent="." instance=ExtResource("3_ilkql")]
+layout_mode = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="HealthBar" parent="." instance=ExtResource("3_kxx7f")]
+layout_mode = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="CreditsAndCubes" parent="." instance=ExtResource("4_03jqv")]
+layout_mode = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="SaveData" parent="." instance=ExtResource("6_u1qtg")]
+layout_mode = 1

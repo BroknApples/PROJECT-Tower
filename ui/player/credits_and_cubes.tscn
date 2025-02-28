@@ -1,0 +1,87 @@
+[gd_scene load_steps=3 format=3 uid="uid://bvdq14mgjbnue"]
+
+[ext_resource type="Theme" uid="uid://bfl1mp070y7c7" path="res://assets/themes/player_ui.tres" id="1_oxy37"]
+
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_r0dyy"]
+
+[node name="CreditsAndCubes" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.005
+anchor_top = 0.605
+anchor_right = 0.24
+anchor_bottom = 0.919
+offset_left = 3.4
+offset_top = -0.400024
+offset_right = -0.800018
+offset_bottom = 0.47998
+grow_vertical = 0
+theme = ExtResource("1_oxy37")
+theme_override_constants/separation = 10
+alignment = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+tooltip_text = "Credits"
+theme_override_constants/separation = 18
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(80, 80)
+layout_mode = 2
+texture = SubResource("PlaceholderTexture2D_r0dyy")
+
+[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer/TextureRect"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "crd"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/HBoxContainer"]
+layout_mode = 2
+
+[node name="CreditCount Label" type="Label" parent="VBoxContainer/HBoxContainer/MarginContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 60
+text = "100.25M"
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+tooltip_text = "Cubes"
+theme_override_constants/separation = 18
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/HBoxContainer2"]
+custom_minimum_size = Vector2(80, 80)
+layout_mode = 2
+texture = SubResource("PlaceholderTexture2D_r0dyy")
+
+[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer2/TextureRect"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "cub"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+
+[node name="CubeCount Label" type="Label" parent="VBoxContainer/HBoxContainer2/MarginContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 60
+text = "225"

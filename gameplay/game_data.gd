@@ -1,15 +1,14 @@
 extends Node
 ##
-## GameData Class
+## GameData
 ##
 ## Holds the data for the game to work
 ## Used to create/load save files
 ##
-class_name GameData
 
 
 @onready var player_list = $Players
-var player_type
+var player
 
 @onready var enemy_list = $Enemies
 var current_world
@@ -40,8 +39,8 @@ func loadSaveData() -> bool:
 	current_world = load("res://gameplay/levels/test_world.tscn").instantiate()
 	add_child(current_world)
 	
-	player_type = load("res://game_objects/player/player.tscn").instantiate()
-	player_list.add_child(player_type)
+	player = load("res://game_objects/player/player.tscn").instantiate()
+	player_list.add_child(player)
 	
 	return true
 

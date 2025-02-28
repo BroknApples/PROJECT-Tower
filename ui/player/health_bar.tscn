@@ -1,0 +1,65 @@
+[gd_scene load_steps=5 format=3 uid="uid://bsthnme2sfrok"]
+
+[sub_resource type="Gradient" id="Gradient_kvoa1"]
+offsets = PackedFloat32Array(0, 0.0163934, 1)
+colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_c3ky6"]
+gradient = SubResource("Gradient_kvoa1")
+
+[sub_resource type="CanvasTexture" id="CanvasTexture_pxk1p"]
+diffuse_texture = SubResource("GradientTexture1D_c3ky6")
+
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_5vtb1"]
+
+[node name="HealthBar" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.005
+anchor_top = 0.944
+anchor_right = 0.298
+anchor_bottom = 0.991
+offset_left = 0.4
+offset_top = -2.52008
+offset_right = 2.83997
+offset_bottom = 2.71997
+
+[node name="MarginContainer" type="MarginContainer" parent="PanelContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 3
+theme_override_constants/margin_top = 3
+theme_override_constants/margin_right = 3
+theme_override_constants/margin_bottom = 3
+
+[node name="TextureProgressBar" type="TextureProgressBar" parent="PanelContainer/MarginContainer"]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 10
+value = 76.0
+nine_patch_stretch = true
+texture_under = SubResource("CanvasTexture_pxk1p")
+texture_progress = SubResource("PlaceholderTexture2D_5vtb1")
+
+[node name="MarginContainer" type="MarginContainer" parent="PanelContainer/MarginContainer/TextureProgressBar"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 10
+
+[node name="Label" type="Label" parent="PanelContainer/MarginContainer/TextureProgressBar/MarginContainer"]
+layout_mode = 2
+text = "100"
+vertical_alignment = 1
+metadata/_edit_use_anchors_ = true

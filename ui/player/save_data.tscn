@@ -1,0 +1,35 @@
+[gd_scene load_steps=2 format=3 uid="uid://dmmh2oprtxlhv"]
+
+[ext_resource type="Theme" uid="uid://bfl1mp070y7c7" path="res://assets/themes/player_ui.tres" id="1_cjaf2"]
+
+[node name="SaveData" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_cjaf2")
+
+[node name="Playtime MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.451
+anchor_top = 0.965
+anchor_right = 0.55
+anchor_bottom = 1.0
+offset_left = -0.920044
+offset_top = -3.20007
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_constants/margin_left = 3
+theme_override_constants/margin_top = 3
+theme_override_constants/margin_right = 3
+theme_override_constants/margin_bottom = 3
+
+[node name="Playtime Label" type="Label" parent="Playtime MarginContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 25
+text = "2:10:15"
+horizontal_alignment = 1
+vertical_alignment = 1

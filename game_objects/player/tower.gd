@@ -55,7 +55,7 @@ func _ready() -> void:
 
 func _process(delta: float):
 	# Regenerate HP
-	stats.hp += clamp((stats.hp_regen * delta), 0.0, stats.max_hp)
+	stats.curr_hp += clamp((stats.hp_regen * delta), 0.0, stats.max_hp)
 	
 	# Do Attacks
 	for weapon in weapons:

@@ -2,7 +2,7 @@
 
 [ext_resource type="Theme" uid="uid://duc811kwcm7sf" path="res://assets/themes/quit_menu.tres" id="1_4a4md"]
 [ext_resource type="Theme" uid="uid://chmrclfq0gybd" path="res://assets/themes/default_theme.tres" id="1_os58u"]
-[ext_resource type="Script" path="res://ui/title-screen/quit_menu.gd" id="2_iuxc2"]
+[ext_resource type="Script" path="res://ui/title_screen/quit_menu.gd" id="2_iuxc2"]
 
 [node name="QuitMenu" type="PanelContainer"]
 offset_left = 4.0

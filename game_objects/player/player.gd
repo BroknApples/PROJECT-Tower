@@ -31,7 +31,8 @@ class PlayerStats:
 
 var stats: PlayerStats
 var tower: Tower
-var player_weapon
+var player_weapon: PlayerWeapon
+var gui ## PlayerGui Control Node
 
 
 func _init() -> void:
@@ -41,8 +42,12 @@ func _init() -> void:
 func _ready() -> void:
 	tower = load("res://game_objects/player/tower.tscn").instantiate()
 	add_child(tower)
-	player_weapon = load("res://game_objects/player/weapons/player_weapon.tscn").instantiate()
+	player_weapon = load("res://game_objects/player/player_weapons/player_weapon_class.tscn").instantiate()
 	add_child(player_weapon)
+	gui = load("res://ui/player/player_gui.tscn").instantiate()
+	add_child(gui)
+	
+	gui.setWorldNumber(120) # Testing
 
 
 func _process(delta: float) -> void:
