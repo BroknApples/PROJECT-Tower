@@ -25,23 +25,28 @@ var enemy_types_dict: Dictionary
 ## e_chances = Dictionary in format { Enemy scene path: float(spawn_chance) }
 ## TODO: Add a background texture path here
 func _init(w_name: String, s_rate: int, enemies_dict: Dictionary) -> void:
-	var couldNotInit = func():
-		print("Fatal ERROR: Could not initialize world: '" + w_name + "'")
-		get_tree().quit() # TODO: Change this to simply going back to the title screen
-	
 	# Ensure the chances of enemies is within the range 0.0 to 1.0
 	var total_spawn_chances = 0.0
 	for e in enemies_dict:
 		if enemies_dict[e] <= 0.0 || enemies_dict[e] > 1.0:
-			couldNotInit
+			couldNotInit(w_name)
 		total_spawn_chances += enemies_dict[e]
 		
 	if (total_spawn_chances < 0.0 || total_spawn_chances > 1.0):
-		couldNotInit
+		couldNotInit(w_name)
 
 	world_name = w_name
 	enemy_types_dict = enemies_dict
 	spawn_rate = s_rate
+
+
+## Could not initialize world
+func couldNotInit(world_name: String):
+	# TODO: Make this display a splash screen error
+	print("Fatal ERROR: Could not initialize world: '" + world_name + "'")
+	# OS.delay_msec(1000) # Sleep for a second before quitting
+	Globals.call_deferred("quitGame") # TODO: Change this to simply going back to the title screen
+
 
 func _process(delta: float) -> void:
 	getEnemySpawn()

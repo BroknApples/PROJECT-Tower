@@ -34,8 +34,8 @@ class WeaponStats:
 	var weapon_range: int
 	
 	func _init(init_base_damage: float, init_base_attack_speed: float,
-	init_base_crit_chance: float, init_base_crit_damage: float,
-	init_base_weapon_range: int) -> void:
+			   init_base_crit_chance: float, init_base_crit_damage: float,
+			   init_base_weapon_range: int) -> void:
 		self.base_damage = init_base_damage
 		self.base_attack_speed = init_base_attack_speed
 		self.base_crit_chance = init_base_crit_chance

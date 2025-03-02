@@ -9,7 +9,5 @@ script = ExtResource("1_4g0x3")
 max_contacts_reported = 15
 
 [node name="Polygon2D" type="Polygon2D" parent="RigidBody2D"]
-scale = Vector2(0.666667, 0.75)
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="RigidBody2D"]
-polygon = PackedVector2Array(0, 1, 1, 0, 1, 0)

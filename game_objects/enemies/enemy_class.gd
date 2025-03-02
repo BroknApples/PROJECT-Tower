@@ -16,6 +16,13 @@ class_name Enemy
 ## armor: Reduces damage taken
 ## hp_regen: How much health does it regenerate in a second
 class EnemyStats:
+	# Type values
+	var credit_value: float
+	var cube_value: float
+	var xp_value: int
+	
+	
+	# Stats
 	var max_hp: float
 	var curr_hp: float
 	var damage: float
@@ -23,23 +30,28 @@ class EnemyStats:
 	var armor: float ## DMG Reduction uses the formula from League of Legends: DMG Taken = ATK * 100 / (100 + Armor)
 	var hp_regen: float
 	
-	func _init(init_max_hp: float, init_damage:float, init_movement_speed: float) -> void:
+	func _init(init_max_hp: float, init_damage:float, init_movement_speed: float,
+			   init_credit_value: float, init_cube_value: float, init_xp_value: int) -> void:
 		self.max_hp = init_max_hp
 		self.damage = init_damage
 		self.movement_speed = init_movement_speed
+		self.credit_value = init_credit_value
+		self.cube_value = init_cube_value
+		self.xp_value = init_xp_value
 
 
 var rng = RandomNumberGenerator.new()
+@onready var enemy = $RigidBody2D
 
-# Tags
 var enemy_type: String ## Always initialized in child class init function
-
-# Stats
-var stats: EnemyStats
+var stats: EnemyStats # Stats
 
 
-func _init(init_max_hp, init_damage, init_movement_speed) -> void:
-	stats = EnemyStats.new(init_max_hp, init_damage, init_movement_speed)
+## Set stats and tags for the enemy
+func _init(init_enemy_type: String, init_max_hp: float, init_damage: float, init_movement_speed: float,
+		   init_credit_value: float, init_cube_value: float, init_xp_value: int) -> void:
+	enemy_type = init_enemy_type
+	stats = EnemyStats.new(init_max_hp, init_damage, init_movement_speed, init_credit_value, init_cube_value, init_xp_value)
 
 
 func _ready() -> void:
@@ -63,7 +75,11 @@ func _on_rigid_body_2d_body_entered(body: Node) -> void:
 	# Always happens on collision
 	if body is StaticBody2D:
 		body.get_parent().takeDamage(self)
-		queue_free()
+		
+		# TESTING
+		if body.get_parent().has_method("getParentPlayer"):
+			body.get_parent().getParentPlayer().addEnemyKilled(self, "SUICIDE")
+		# TESTING
 	
 	# Do unique interactions on collision based on child declaration
 	doOnCollision(body)
@@ -105,23 +121,23 @@ func findSpawnPosition() -> void:
 func findNearestAttackable() -> Vector2:
 	var players = get_parent().get_parent().get_node("Players").get_children()
 
-	var closest_tower_pos = players[0].get_node("Tower").global_position
+	var closest_tower_pos = Vector2(INF, INF)
 	
 	for player in players:
-		if (player.get_node("Tower").global_position < closest_tower_pos):
-			closest_tower_pos = player.global_position
+		for tower in player.get_node("Towers").get_children():
+			if (tower.global_position < closest_tower_pos):
+				closest_tower_pos = tower.global_position
 
 	return closest_tower_pos
 
 
 ## Default process for phyiscs simulation -> MOST enemies will use this
 func defaultPhysicsProcess(delta: float):
-	var enemy = $RigidBody2D
 	var nearest_attackable = findNearestAttackable()
 	
 	# Move towards position
 	var direction = (nearest_attackable - enemy.global_position).normalized()
-	enemy.apply_force(direction * stats.movement_speed, Vector2.ZERO)
+	enemy.linear_velocity = direction * stats.movement_speed
 	
 	# TODO: Rotate to angle
 	#const ROTATION_SPEED = 50.0
@@ -131,5 +147,8 @@ func defaultPhysicsProcess(delta: float):
 	#enemy.apply_torque(torque)
 
 
+## VIRTUAL FUNCTION
+## Modify in child types and do special interactions on collisions like
+## explode into smaller enemies or something(trojan horse style)
 func doOnCollision(body: Node) -> void:
 	pass

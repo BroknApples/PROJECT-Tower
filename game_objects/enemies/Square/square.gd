@@ -6,10 +6,19 @@ extends Enemy
 ##
 
 
+# Stats for this specific enemy
+# Copy and paste this into every new enemy type class
+const _ENEMY_TYPE = "Square"
+const _MAX_HP = 10.0
+const _DAMAGE = 2.0
+const _MOVEMENT_SPEED = 100
+const _CREDIT_VALUE = 3
+const _CUBE_VALUE = 0.02
+const _XP_VALUE = 4
+
+
 func _init() -> void:
-	# Enemy stats
-	enemy_type = "Square"
-	super._init(10.0, 2.0, 25.0)
+	super._init(_ENEMY_TYPE, _MAX_HP, _DAMAGE, _MOVEMENT_SPEED, _CREDIT_VALUE, _CUBE_VALUE, _XP_VALUE)
 
 
 func _ready():
@@ -22,7 +31,7 @@ func _ready():
 	var polygon = $RigidBody2D/Polygon2D
 	var collider = $RigidBody2D/CollisionPolygon2D
 	
-	var s = 30 ## Side Length / 2
+	var s = 15 ## Side Length / 2
 	var vertices = PackedVector2Array([
 		Vector2(-s, s),
 		Vector2(-s, -s),

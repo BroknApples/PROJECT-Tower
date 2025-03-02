@@ -7,7 +7,7 @@ extends PanelContainer
 
 ## If the user presses yes, quit the program
 func _on_yes_pressed() -> void:
-	get_tree().quit()
+	Globals.quitGame()
 
 
 ## If the user presses no, then close the quit menu

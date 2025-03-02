@@ -8,11 +8,11 @@ extends Control
 # TODO: Move these into the game_data.gd file and setup general data loading
 var hours = 2
 var minutes = 10
-var seconds: float = 23
+var seconds: float = 0
 
 
 func _ready() -> void:
-	# Testing
+	# TESTING
 	setMaxHp(500.4)
 	setCurrHp(60.576)
 	setCredits(12430)
@@ -21,6 +21,7 @@ func _ready() -> void:
 	setWorldNumber(3)
 	setPlaytime(hours, minutes, seconds)
 	setDifficulty(Globals.Difficulty.HARD)
+	# TESTING
 
 
 func _process(delta: float) -> void:
@@ -51,21 +52,21 @@ func setCurrHp(new_curr_hp: float) -> void:
 ## Set the text displayed in the credit count labels
 func setCredits(new_credit_count: int) -> void:
 	# TODO: Shorten the number to display a suffix like "M" for a million, or "K" for a thousand, etc.
-	var credit_count_label = $"CreditsAndCubes/VBoxContainer/HBoxContainer/MarginContainer/CreditCount Label"
+	var credit_count_label = $"CreditsAndCubes/MarginContainer/VBoxContainer/Credits HBoxContainer/MarginContainer/CreditCount Label"
 	credit_count_label.text = str(new_credit_count)
 
 
 ## Set the text displayed in the cube count labels
 func setCubes(new_cube_count: int) -> void:
 	# TODO: Shorten the number to display a suffix like "M" for a million, or "K" for a thousand, etc.
-	var cube_count_label = $"CreditsAndCubes/VBoxContainer/HBoxContainer2/MarginContainer/CubeCount Label"
+	var cube_count_label = $"CreditsAndCubes/MarginContainer/VBoxContainer/Cubes HBoxContainer/MarginContainer/CubeCount Label"
 	cube_count_label.text = str(new_cube_count)
 
 
 ## Display the current total playtime of a save file, seconds are rounded to the nearest hundreth -> (.00)
 func setPlaytime(hours: int, minutes: int, seconds: float) -> void:
 	var playtime_label = $"SaveData/Playtime MarginContainer/Playtime Label"
-	playtime_label.text = str(hours) + ":" + str(minutes) + ":" + str("%.2f" % seconds)
+	playtime_label.text = str(hours) + ":" + str(minutes) + ":" + str("%02d" % int(seconds)) + ":" + str("%02d" % int((seconds - int(seconds)) * 100))
 
 
 ## Set the text displayed in the wave number label
