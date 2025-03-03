@@ -49,12 +49,12 @@ func _physics_process(delta: float) -> void:
 		var stagger_velocity = 2000
 		match rand_num:
 			0:
-				enemy.apply_impulse(Vector2(stagger_velocity, stagger_velocity), Vector2.ZERO)
+				enemy.apply_force(Vector2(stagger_velocity, stagger_velocity), Vector2.ZERO)
 			2:
-				enemy.apply_impulse(Vector2(-stagger_velocity, stagger_velocity), Vector2.ZERO)
+				enemy.apply_force(Vector2(-stagger_velocity, stagger_velocity), Vector2.ZERO)
 			3:
-				enemy.apply_impulse(Vector2(-stagger_velocity, -stagger_velocity), Vector2.ZERO)
+				enemy.apply_force(Vector2(-stagger_velocity, -stagger_velocity), Vector2.ZERO)
 			4:
-				enemy.apply_impulse(Vector2(stagger_velocity, -stagger_velocity), Vector2.ZERO)
+				enemy.apply_force(Vector2(stagger_velocity, -stagger_velocity), Vector2.ZERO)
 	else:
 		defaultPhysicsProcess(delta)
