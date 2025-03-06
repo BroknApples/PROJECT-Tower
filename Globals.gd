@@ -3,8 +3,11 @@ extends Node
 ## Global Variables
 ##
 
-@onready var screen_size = get_tree().root.size
+## Current window size
+@onready var window_size = get_tree().root.size
 
+## Global Random Number Generator
+var rng = RandomNumberGenerator.new()
 
 enum Difficulty {
 	EASY,
@@ -17,6 +20,11 @@ enum TowerTags {
 	CORE ## If a tower with this tag dies, the you lose
 }
 
+enum EnemyTags {
+	# Personalities
+	STAGGER
+}
+
 ## Pair type
 class Pair:
 	var first
@@ -27,12 +35,12 @@ class Pair:
 
 
 func _ready() -> void:
-	get_window().connect("size_changed", _on_screen_size_changed)
+	get_window().connect("size_changed", _on_window_size_changed)
 
 
-func _on_screen_size_changed():
-	screen_size = get_viewport().size
-	print("Screen size changed to: " + str(screen_size.x) + ", " + str(screen_size.y))
+func _on_window_size_changed():
+	window_size = get_viewport().size
+	print("Screen size changed to: " + str(window_size.x) + ", " + str(window_size.y))
 	# TODO: On screen resize during a game, we need to calculate EVERYTHING again (except for enemies)
 
 

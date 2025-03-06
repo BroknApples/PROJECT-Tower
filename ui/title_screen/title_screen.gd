@@ -7,10 +7,10 @@ extends Control
 
 # TESTING
 func _ready() -> void:
-	var window = get_viewport().get_window()
-	var test_size = Vector2i(1280, 720)
-	window.size = test_size
-	window.position = test_size/4
+	#var window = get_viewport().get_window()
+	#var test_size = Vector2i(1280, 720)
+	#window.size = test_size
+	#window.position = test_size/4
 	pass
 # TESTING
 

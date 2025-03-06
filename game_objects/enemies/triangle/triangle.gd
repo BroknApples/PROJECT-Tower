@@ -18,7 +18,7 @@ const _XP_VALUE = 1
 
 func _init() -> void:
 	super._init(_ENEMY_TYPE, _MAX_HP, _DAMAGE, _MOVEMENT_SPEED, _CREDIT_VALUE, _CUBE_VALUE, _XP_VALUE)
-
+	stats.setPersonality(EnemyTypes.StaggerType.new())
 
 func _ready():
 	super._ready()
@@ -43,18 +43,4 @@ func _ready():
 
 
 func _physics_process(delta: float) -> void:
-	# TODO: Make this a method and give enemies with the tag "STAGGER_TYPE" this method instead of defualt physics process
-	var rand_num = rng.randi_range(1, 160)
-	if (rand_num <= 4):
-		var stagger_velocity = 2000
-		match rand_num:
-			0:
-				enemy.apply_force(Vector2(stagger_velocity, stagger_velocity), Vector2.ZERO)
-			2:
-				enemy.apply_force(Vector2(-stagger_velocity, stagger_velocity), Vector2.ZERO)
-			3:
-				enemy.apply_force(Vector2(-stagger_velocity, -stagger_velocity), Vector2.ZERO)
-			4:
-				enemy.apply_force(Vector2(stagger_velocity, -stagger_velocity), Vector2.ZERO)
-	else:
-		defaultPhysicsProcess(delta)
+	defaultPhysicsProcess(delta)

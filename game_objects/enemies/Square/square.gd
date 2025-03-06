@@ -19,6 +19,7 @@ const _XP_VALUE = 4
 
 func _init() -> void:
 	super._init(_ENEMY_TYPE, _MAX_HP, _DAMAGE, _MOVEMENT_SPEED, _CREDIT_VALUE, _CUBE_VALUE, _XP_VALUE)
+	stats.setPersonality(EnemyTypes.StaggerType.new())
 
 
 func _ready():

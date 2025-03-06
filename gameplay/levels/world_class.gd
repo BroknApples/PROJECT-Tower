@@ -11,7 +11,6 @@ class_name WorldClass
 
 ## Name of the world
 var world_name: String
-var rng = RandomNumberGenerator.new()
 
 ## Chance for any type of enemy to spawn on any given frame
 ## This should increase as the playtime on a world increases
@@ -52,10 +51,10 @@ func _process(delta: float) -> void:
 	getEnemySpawn()
 
 func getEnemySpawn():
-	var rand_int = rng.randi_range(0, 10000)
+	var rand_int = Globals.rng.randi_range(0, 10000)
 	
 	if (rand_int < spawn_rate):
-		var rand_float = rng.randf_range(0.0, 1.0)
+		var rand_float = Globals.rng.randf_range(0.0, 1.0)
 		
 		# calculate the ranges of each spawn
 		var lower_bound = 0.0

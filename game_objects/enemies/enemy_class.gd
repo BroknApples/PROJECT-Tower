@@ -1,4 +1,4 @@
-extends Node
+extends Node2D
 ##
 ## Enemy Class
 ##
@@ -16,6 +16,9 @@ class_name Enemy
 ## armor: Reduces damage taken
 ## hp_regen: How much health does it regenerate in a second
 class EnemyStats:
+	# Personality and element
+	var personality: EnemyTypes.PersonalityType
+	
 	# Type values
 	var credit_value: float
 	var cube_value: float
@@ -38,9 +41,10 @@ class EnemyStats:
 		self.credit_value = init_credit_value
 		self.cube_value = init_cube_value
 		self.xp_value = init_xp_value
+	
+	func setPersonality(new_personality: EnemyTypes.PersonalityType):
+		personality = new_personality
 
-
-var rng = RandomNumberGenerator.new()
 @onready var enemy = $RigidBody2D
 
 var enemy_type: String ## Always initialized in child class init function
@@ -52,6 +56,7 @@ func _init(init_enemy_type: String, init_max_hp: float, init_damage: float, init
 		   init_credit_value: float, init_cube_value: float, init_xp_value: int) -> void:
 	enemy_type = init_enemy_type
 	stats = EnemyStats.new(init_max_hp, init_damage, init_movement_speed, init_credit_value, init_cube_value, init_xp_value)
+	stats.setPersonality(EnemyTypes.PersonalityType.new()) # Set empty personality by default
 
 
 func _ready() -> void:
@@ -95,21 +100,21 @@ func findSpawnPosition() -> void:
 	var xPos: int
 	var yPos: int
 	
-	var edge = rng.randi_range(0, 3)  # 0 = Left, 1 = Right, 2 = Top, 3 = Bottom
+	var edge = Globals.rng.randi_range(0, 3)  # 0 = Left, 1 = Right, 2 = Top, 3 = Bottom
 	
 	match edge:
 		0:  # Left side
-			xPos = -rng.randi_range(MIN_PADDING, MAX_PADDING)
-			yPos = rng.randi_range(-MIN_PADDING, Globals.screen_size.y + MIN_PADDING)
+			xPos = -Globals.rng.randi_range(MIN_PADDING, MAX_PADDING)
+			yPos = Globals.rng.randi_range(-MIN_PADDING, Globals.window_size.y + MIN_PADDING)
 		1:  # Right side
-			xPos = Globals.screen_size.x + rng.randi_range(MIN_PADDING, MAX_PADDING)
-			yPos = rng.randi_range(-MIN_PADDING, Globals.screen_size.y + MIN_PADDING)
+			xPos = Globals.window_size.x + Globals.rng.randi_range(MIN_PADDING, MAX_PADDING)
+			yPos = Globals.rng.randi_range(-MIN_PADDING, Globals.window_size.y + MIN_PADDING)
 		2:  # Top side
-			xPos = rng.randi_range(-MIN_PADDING, Globals.screen_size.x + MIN_PADDING)
-			yPos = -rng.randi_range(MIN_PADDING, MAX_PADDING)
+			xPos = Globals.rng.randi_range(-MIN_PADDING, Globals.window_size.x + MIN_PADDING)
+			yPos = -Globals.rng.randi_range(MIN_PADDING, MAX_PADDING)
 		3:  # Bottom side
-			xPos = rng.randi_range(-MAX_PADDING, Globals.screen_size.x + MIN_PADDING)
-			yPos = Globals.screen_size.y + rng.randi_range(MIN_PADDING, MAX_PADDING)
+			xPos = Globals.rng.randi_range(-MAX_PADDING, Globals.window_size.x + MIN_PADDING)
+			yPos = Globals.window_size.y + Globals.rng.randi_range(MIN_PADDING, MAX_PADDING)
 	
 	$".".set_position(Vector2(xPos, yPos))
 	
@@ -133,18 +138,12 @@ func findNearestAttackable() -> Vector2:
 
 ## Default process for phyiscs simulation -> MOST enemies will use this
 func defaultPhysicsProcess(delta: float):
-	var nearest_attackable = findNearestAttackable()
-	
-	# Move towards position
-	var direction = (nearest_attackable - enemy.global_position).normalized()
-	enemy.linear_velocity = direction * stats.movement_speed
-	
-	# TODO: Rotate to angle
-	#const ROTATION_SPEED = 50.0
-	#var target_angle = (nearest_attackable - enemy.global_position).angle()
-	#var angle_difference = fmod(target_angle - enemy.rotation + PI, 2 * PI) - PI
-	#var torque = angle_difference * ROTATION_SPEED
-	#enemy.apply_torque(torque)
+	if (!stats.personality.runPhysicsProcess(delta, enemy)):
+		var nearest_attackable = findNearestAttackable()
+		
+		# Move towards position
+		var direction = (nearest_attackable - enemy.global_position).normalized()
+		enemy.linear_velocity = direction * stats.movement_speed
 
 
 ## VIRTUAL FUNCTION
