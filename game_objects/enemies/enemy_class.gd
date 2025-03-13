@@ -33,9 +33,10 @@ class EnemyStats:
 	var armor: float ## DMG Reduction uses the formula from League of Legends: DMG Taken = ATK * 100 / (100 + Armor)
 	var hp_regen: float
 	
-	func _init(init_max_hp: float, init_damage:float, init_movement_speed: float,
+	func _init(init_max_hp: float, init_curr_hp: float, init_damage:float, init_movement_speed: float,
 			   init_credit_value: float, init_cube_value: float, init_xp_value: int) -> void:
 		self.max_hp = init_max_hp
+		self.curr_hp = init_curr_hp
 		self.damage = init_damage
 		self.movement_speed = init_movement_speed
 		self.credit_value = init_credit_value
@@ -45,17 +46,17 @@ class EnemyStats:
 	func setPersonality(new_personality: EnemyTypes.PersonalityType):
 		personality = new_personality
 
-@onready var enemy = $RigidBody2D
+@onready var enemy_rigid_body = $RigidBody2D
 
 var enemy_type: String ## Always initialized in child class init function
 var stats: EnemyStats # Stats
+var dmg_tag: WeaponClass ## What last damaged this enemy
 
 
 ## Set stats and tags for the enemy
-func _init(init_enemy_type: String, init_max_hp: float, init_damage: float, init_movement_speed: float,
-		   init_credit_value: float, init_cube_value: float, init_xp_value: int) -> void:
+func _init(init_enemy_type: String, init_enemy_stats: EnemyStats) -> void:
 	enemy_type = init_enemy_type
-	stats = EnemyStats.new(init_max_hp, init_damage, init_movement_speed, init_credit_value, init_cube_value, init_xp_value)
+	stats = init_enemy_stats
 	stats.setPersonality(EnemyTypes.PersonalityType.new()) # Set empty personality by default
 
 
@@ -63,15 +64,17 @@ func _ready() -> void:
 	findSpawnPosition()
 	
 	# Set contact monitoring to true
-	var rigid_body = $RigidBody2D
-	rigid_body.set_contact_monitor(true)
-	rigid_body.max_contacts_reported = 25
+	enemy_rigid_body.set_contact_monitor(true)
+	enemy_rigid_body.max_contacts_reported = 25
 	
 	# Set collision detection function
-	rigid_body.body_entered.connect(_on_rigid_body_2d_body_entered)
+	enemy_rigid_body.body_entered.connect(_on_rigid_body_2d_body_entered)
 
 
 func _process(delta: float) -> void:
+	checkDeath()
+	
+	# Add hp regen value
 	stats.curr_hp += delta * stats.hp_regen
 
 
@@ -88,6 +91,16 @@ func _on_rigid_body_2d_body_entered(body: Node) -> void:
 	
 	# Do unique interactions on collision based on child declaration
 	doOnCollision(body)
+
+
+## Check if enemy has died
+func checkDeath() -> void:
+	if (stats.curr_hp <= 0.0):
+		print("EnemyType '" + enemy_type + "' has died.")
+		dmg_tag.getOwner().addCredits(stats.credit_value)
+		dmg_tag.getOwner().addCubes(stats.cube_value)
+		dmg_tag.getOwner().addXp(stats.xp_value)
+		queue_free()
 
 
 ## Find a position off the screen to spawn a new enemy
@@ -138,13 +151,25 @@ func findNearestAttackable() -> Vector2:
 
 ## Default process for phyiscs simulation -> MOST enemies will use this
 func defaultPhysicsProcess(delta: float):
-	if (!stats.personality.runPhysicsProcess(delta, enemy)):
-		var nearest_attackable = findNearestAttackable()
-		
+	var nearest_attackable = findNearestAttackable()
+	var direction = (nearest_attackable - enemy_rigid_body.global_position).normalized()
+	if (!stats.personality.runPhysicsProcess(delta, enemy_rigid_body)):
 		# Move towards position
-		var direction = (nearest_attackable - enemy.global_position).normalized()
-		enemy.linear_velocity = direction * stats.movement_speed
+		enemy_rigid_body.linear_velocity = direction * stats.movement_speed
+	
+	# Always rotate to position
+	#const ROTATION_SPEED = 300.0
+	#var target_rotation = atan2(direction.y, direction.x)
+	#var rotation_diff = fposmod((target_rotation - enemy_rigid_body.rotation) + PI, 2 * PI) - PI
+	#
+	#enemy_rigid_body.angular_velocity = sign(rotation_diff) * ROTATION_SPEED * delta
 
+
+## Removes some hp from the node
+func takeDamage(tagger: Node, damage: float) -> void:
+	print("EnemyType '" + enemy_type + "' took " + str(damage) + " damage")
+	stats.curr_hp -= damage
+	dmg_tag = tagger
 
 ## VIRTUAL FUNCTION
 ## Modify in child types and do special interactions on collisions like

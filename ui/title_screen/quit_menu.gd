@@ -16,6 +16,6 @@ func _on_no_pressed() -> void:
 
 
 ## Close the quit menu when 'esc' is pressed
-func _input(event):
+func _input(event: InputEvent):
 	if Input.is_action_just_pressed("Esc"):
 		$".".visible = false

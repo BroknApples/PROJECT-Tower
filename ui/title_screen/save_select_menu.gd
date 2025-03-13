@@ -26,6 +26,6 @@ func _on_start_game_button_pressed() -> void:
 		get_tree().get_root().remove_child($"..")
 
 ## Close the Save select menu when 'esc' is pressed
-func _input(event):
+func _input(event: InputEvent):
 	if Input.is_action_just_pressed("Esc"):
 		$".".visible = false

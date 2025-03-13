@@ -13,6 +13,8 @@ var player
 @onready var enemy_list = $Enemies
 var current_world
 
+@onready var augment_manager = $AugmentManager
+
 const _SAVE_DIRECTORY = "user://game_saves/"
 var save_id = 0 # If save_id == 0, then a save file has not been loaded
 var game_loaded: bool ## Has the game loaded yet

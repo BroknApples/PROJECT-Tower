@@ -6,11 +6,12 @@ Initializing member variables through function call: prefix with init_
 ************************** end NAMING CONVENTION **************************
 
 ******************************** beg IDEAS ********************************
-Credts = default currency
-Cubes = currency to build things around the map(only some are permanent through upgrades, otherwise they can be destroyed
-		pretty easily and they cost so much to build, only able to realistically get like 10 at once)
 
-Finished Player folder reformatting, do the rest
+Weapon upgrades have 9 tiers, every 3rd also gives an augment card
+
+
+Create an in-game dictionary holding each enemy type and personalities, etc. preview with videos too 
+
 
 
 Every time the user will be prompted with a choice of weapon upgrade, just loop through

@@ -24,6 +24,7 @@ func _ready() -> void:
 	# TESTING
 
 
+
 func _process(delta: float) -> void:
 	seconds += delta
 	if seconds >= 60:

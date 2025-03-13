@@ -7,7 +7,7 @@ extends Control
 
 
 @onready var input_button_scene = preload("res://ui/settings/input_button.tscn")
-@onready var action_list = $"PanelContainer/MarginContainer/Input Settings VBox/ScrollContainer/Action List"
+@onready var action_list = $"PanelContainer/MarginContainer/Input Settings VBoxContainer/ScrollContainer/VBoxContainer"
 
 var is_remapping = false
 var action_to_remap = null
@@ -21,6 +21,17 @@ var input_actions = {
 
 func _ready():
 	createActionList();
+	self.visible = false
+
+
+func _input(event: InputEvent) -> void:
+	if (Input.is_action_just_pressed("Esc")):
+		self.visible = false
+
+
+func open() -> void:
+	self.visible = true
+
 
 ## Create an action list that allows for remapping keybinds
 func createActionList() -> void:

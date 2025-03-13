@@ -1,10 +1,13 @@
-[gd_scene load_steps=2 format=3 uid="uid://dmlo6pue2hhtq"]
+[gd_scene load_steps=3 format=3 uid="uid://dmlo6pue2hhtq"]
 
 [ext_resource type="Script" path="res://gameplay/game_data.gd" id="1_fepop"]
+[ext_resource type="PackedScene" uid="uid://bj0coeyeyuxhb" path="res://gameplay/augments/augment_manager.tscn" id="2_bptpf"]
 
-[node name="Game" type="Node"]
+[node name="Game" type="Node2D"]
 script = ExtResource("1_fepop")
 
 [node name="Players" type="Node" parent="."]
 
 [node name="Enemies" type="Node" parent="."]
+
+[node name="AugmentManager" parent="." instance=ExtResource("2_bptpf")]
