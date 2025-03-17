@@ -45,13 +45,13 @@ func _ready() -> void:
 
 
 func _input(event):
-	if Input.is_action_just_pressed("AttackLock"):
+	if (!player_owner.semi_paused && Input.is_action_just_pressed("AttackLock")):
 		lockAttackPosition()
 
 
 # Child classes should NOT overwrite this process function
 func _process(delta: float) -> void:
-	if (!attack_pos_locked):
+	if (!attack_pos_locked && !player_owner.semi_paused):
 		attack_pos = Globals.getMousePosition()
 	super._process(delta)
 	# TODO: For player weapons, i need to make a custom fire mode(on at least some of them)
@@ -66,7 +66,7 @@ func findAttackPosition() -> Vector2:
 
 
 func lockAttackPosition() -> void:
-	# TODO: Need to change cursor back to default when locked and place an icon in the screen to show where it is locked to
+	# TODO: Need to place an icon in the screen to show where it is locked to
 	if (!attack_pos_locked):
 		attack_pos_locked = true
 		Globals.setCursorShape(null) # Sets it back to default

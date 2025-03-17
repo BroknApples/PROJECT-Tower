@@ -32,14 +32,17 @@ func _ready() -> void:
 
 ## If the user presses play, display the SaveSelect UI
 func _on_play_pressed() -> void:
+	AudioManager.playStream(AudioManager.UI_CLICK1)
 	save_select_menu.visible = true
 
 
 ## If the user presses settings, display the Settings UI
 func _on_settings_pressed() -> void:
+	AudioManager.playStream(AudioManager.UI_CLICK1)
 	settings_menu.open()
 
 
 ## If the user presses quit, display the QuitMenu UI
 func _on_quit_pressed() -> void:
+	AudioManager.playStream(AudioManager.UI_CLICK1)
 	quit_menu.visible = true

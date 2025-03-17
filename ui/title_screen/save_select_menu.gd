@@ -12,6 +12,8 @@ var selected_save
 
 ## Create a game data node and load data from a save file
 func _on_start_game_button_pressed() -> void:
+	AudioManager.playStream(AudioManager.UI_CLICK1)
+	
 	# TODO: Implement save files
 	var save_id = 1
 	var game_scene = load("res://gameplay/game_data.tscn").instantiate();

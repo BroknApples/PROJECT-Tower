@@ -4,6 +4,7 @@ extends Node
 ##
 
 
+var aug_queue: Array ## If there is already an augment selection screen, add the new one to a queue
 const AugmentEssentials = preload("res://gameplay/augments/augment_essentials.gd")
 
 ## Default chance to roll a given rarity
@@ -25,10 +26,33 @@ var rare_augments: Array[Augment]
 var uncommon_augments: Array[Augment]
 var common_augments: Array[Augment]
 
+
 func _ready() -> void:
 	_setupAugmentLists("res://gameplay/augments/augment_list/")
-	await get_tree().create_timer(3).timeout # Wait for 3 seconds
-	rollAugments(Player.new())
+	# TESTING
+	#var chances2 = []
+	#chances2.push_back(_getChances(25))
+	#chances2.push_back(_getChances(50))
+	#chances2.push_back(_getChances(100))
+	#chances2.push_back(_getChances(150))
+	#chances2.push_back(_getChances(200))
+	#chances2.push_back(_getChances(250))
+	#chances2.push_back(_getChances(300))
+	#
+	#print("TESTCHANCES NEW ENTIRE BATCH")
+	#for a in chances2:
+		#print("TESTCHANCES\n")
+		#var c = 0
+		#for j in a:
+			#print("TESTCHANCES: " + str(c + 1) + ": " + str(AugmentEssentials.new().rarityToString(c) + " ->   " + str(a[j])))
+			#c += 1
+		#print("TESTCHANCES\n")
+	# TESTING
+
+
+func _process(_delta: float) -> void:
+	if (self.get_child_count() == 0 && aug_queue.size() != 0):
+		self.add_child(aug_queue.pop_front())
 
 ## Setup Augment Lists
 func _setupAugmentLists(directory_path: String) -> void:
@@ -51,26 +75,43 @@ func _setupAugmentLists(directory_path: String) -> void:
 			print("ERROR: Directory detected in an augment folder. Please remove.")
 			return
 		
-		var full_path = directory_path + "/" + file
+		var full_path = directory_path + file
 		
 		# Check which rarities of the augment exist
-		var augment = load(full_path)
-		var instance = augment.instantiate() # Temporarily instantiate this augment
+		var instance = load(full_path).new()  # Temporarily instantiate this augment
 		
-		all_augments.push_back(augment) 			# All Augments
-		if (instance.setEvolution()): 				# Evolution augments
-			evolution_augments.push_back(augment)
-		if (instance.setLegendary()): 				# Legendary augments
-			legendary_augments.push_back(augment)
-		if (instance.setEpic()): 					# Epic augments
-			epic_augments.push_back(augment)
-		if (instance.setRare()): 					# Rare augments
-			rare_augments.push_back(augment)
-		if (instance.setUncommon()): 				# Uncommon augments
-			uncommon_augments.push_back(augment)
-		if (instance.setCommon()): 					# Common augments
-			common_augments.push_back(augment)
-		instance.free() # Delete augment instance.free() # Delete augment instance
+		all_augments.push_back(instance.duplicate()) # All Augments
+		if (instance.setEvolutionRarity()): 				# Evolution augments
+			var rarity_aug = instance.duplicate()
+			rarity_aug.setEvolutionRarity()
+			evolution_augments.push_back(rarity_aug)
+		
+		if (instance.setLegendaryRarity()): 				# Legendary augments
+			var rarity_aug = instance.duplicate()
+			rarity_aug.setLegendaryRarity()
+			legendary_augments.push_back(rarity_aug)
+
+		if (instance.setEpicRarity()): 						# Epic augments
+			var rarity_aug = instance.duplicate()
+			rarity_aug.setEpicRarity()
+			epic_augments.push_back(rarity_aug)
+		
+		if (instance.setRareRarity()): 						# Rare augments
+			var rarity_aug = instance.duplicate()
+			rarity_aug.setRareRarity()
+			rare_augments.push_back(rarity_aug)
+		
+		if (instance.setUncommonRarity()): 					# Uncommon augments
+			var rarity_aug = instance.duplicate()
+			rarity_aug.setUncommonRarity()
+			uncommon_augments.push_back(rarity_aug)
+		
+		if (instance.setCommonRarity()): 					# Common augments
+			var rarity_aug = instance.duplicate()
+			rarity_aug.setCommonRarity()
+			common_augments.push_back(rarity_aug)
+		
+		instance.free() # Delete augment instance
 		
 		file = dir.get_next()
 	
@@ -79,7 +120,8 @@ func _setupAugmentLists(directory_path: String) -> void:
 
 ## Roll 3 augments
 ## player: which player owns the luck stat and will be assigned the augment
-func rollAugments(player: Player) -> void:
+## type_classifiers: Specifiers which augment types can be rolled by this augment batch
+func rollAugments(player: Player, type_classifiers: Array[AugmentEssentials.Classifier] = []) -> void:
 	var augments: Array[Augment] = []
 	
 	for i in range(1, 4):
@@ -96,40 +138,45 @@ func rollAugments(player: Player) -> void:
 			
 			if (rand_float <= curr_total):
 				rarity = key
+				break
 		
 		# Instantiate a new augment of a certain rarity
-		#augments[i] == _getAugmentOfRarity(rarity).instantiate()
-		augments.push_back(Augment.new())
+		var new_aug = _getAugmentOfRarity(rarity)
+		if (new_aug != null):
+			augments.push_back(new_aug)
 	
-	print("printing augs:")
-	for i in augments:
-		print(i.augment_name)
+	print("Augments Rolled:")
+	for i in range(0, 3):
+		print("     Augment" + str(i + 1) + ": " + augments[i].augment_name)
 	
 	var aug_selection_screen = load("res://gameplay/augments/augment_selection_screen.tscn").instantiate()
 	aug_selection_screen.initialize(player, augments)
-	self.add_child(aug_selection_screen)
+	if (self.get_child_count() == 0):
+		self.add_child(aug_selection_screen)
+	else:
+		aug_queue.push_back(aug_selection_screen)
 
 
 ## Get the chances to roll any given augment rarity
 func _getChances(luck: int) -> Dictionary:
-	var luck_factor = clamp(luck / 100.0, 0, 3) # Keep between 0 and 3 for scaling
+	# TODO: Fix luck based rarities
+	#const EVOLUTION_SCALER = 
+	#const LEGENDARY_SCALER = 
+	#const EPIC_SCALER = 
+	#const RARE_SCALER = 
+	#const UNCOMMON_SCALER =
+	#const COMMON_SCALER =
 	
-	
-	# Scales harder with super high values
-	var luck_modifier = 0.16
-	if (luck >= 200):
-		luck_modifier = 0.20
-	elif (luck >= 100):
-		luck_modifier = 0.24 
+	clamp(luck, 0, 300) # Max luck is 300
 	
 	var chances = _DEFAULT_CHANCES.duplicate()
 	
-	var evolution_chance = _DEFAULT_CHANCES[AugmentEssentials.Rarity.EVOLUTION] + luck_factor * luck_modifier
-	var legendary_chance = _DEFAULT_CHANCES[AugmentEssentials.Rarity.LEGENDARY] + luck_factor * luck_modifier
-	var epic_chance = _DEFAULT_CHANCES[AugmentEssentials.Rarity.EPIC] + luck_factor * luck_modifier
-	var rare_chance = _DEFAULT_CHANCES[AugmentEssentials.Rarity.RARE] + luck_factor * (luck_modifier * 0.5)
-	var uncommon_chance = _DEFAULT_CHANCES[AugmentEssentials.Rarity.UNCOMMON] + luck_factor * (luck_modifier * 0.3)
-	var common_chance = _DEFAULT_CHANCES[AugmentEssentials.Rarity.COMMON] - luck_factor * luck_modifier
+	var evolution_chance = _DEFAULT_CHANCES[AugmentEssentials.Rarity.EVOLUTION]
+	var legendary_chance = _DEFAULT_CHANCES[AugmentEssentials.Rarity.LEGENDARY]
+	var epic_chance = _DEFAULT_CHANCES[AugmentEssentials.Rarity.EPIC]
+	var rare_chance = _DEFAULT_CHANCES[AugmentEssentials.Rarity.RARE]
+	var uncommon_chance = _DEFAULT_CHANCES[AugmentEssentials.Rarity.UNCOMMON]
+	var common_chance = _DEFAULT_CHANCES[AugmentEssentials.Rarity.COMMON]
 	
 	# Normalize values to keep between 0 and 1
 	var total_chance = evolution_chance + legendary_chance + epic_chance + rare_chance + uncommon_chance + common_chance
@@ -154,19 +201,18 @@ func _getChances(luck: int) -> Dictionary:
 func _getAugmentOfRarity(rarity: AugmentEssentials.Rarity) -> Augment:
 	var rand_aug = func(array: Array[Augment]): return array[Globals.rng.randi_range(0, array.size() - 1)]
 	
-	var arr: Array[Augment]
 	match rarity:
-			AugmentEssentials.Rarity.EVOLUTION:
-				return rand_aug.call(evolution_augments)
-			AugmentEssentials.Rarity.LEGENDARY:
-				return rand_aug.call(legendary_augments)
-			AugmentEssentials.Rarity.EPIC:
-				return rand_aug.call(epic_augments)
-			AugmentEssentials.Rarity.RARE:
-				return rand_aug.call(rare_augments)
-			AugmentEssentials.Rarity.UNCOMMON:
-				return rand_aug.call(uncommon_augments)
-			AugmentEssentials.Rarity.COMMON:
-				return rand_aug.call(common_augments)
+		AugmentEssentials.Rarity.EVOLUTION:
+			return rand_aug.call(evolution_augments)
+		AugmentEssentials.Rarity.LEGENDARY:
+			return rand_aug.call(legendary_augments)
+		AugmentEssentials.Rarity.EPIC:
+			return rand_aug.call(epic_augments)
+		AugmentEssentials.Rarity.RARE:
+			return rand_aug.call(rare_augments)
+		AugmentEssentials.Rarity.UNCOMMON:
+			return rand_aug.call(uncommon_augments)
+		AugmentEssentials.Rarity.COMMON:
+			return rand_aug.call(common_augments)
 	
 	return null

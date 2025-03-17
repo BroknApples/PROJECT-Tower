@@ -10,4 +10,7 @@ script = ExtResource("1_fepop")
 
 [node name="Enemies" type="Node" parent="."]
 
-[node name="AugmentManager" parent="." instance=ExtResource("2_bptpf")]
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="AugmentManager" parent="CanvasLayer" instance=ExtResource("2_bptpf")]
+size_flags_vertical = 4

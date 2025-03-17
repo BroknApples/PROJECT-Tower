@@ -1,7 +1,18 @@
 [gd_scene load_steps=5 format=3 uid="uid://ndj1rcojrm3j"]
 
 [ext_resource type="Script" path="res://gameplay/augments/augment.gd" id="1_f1cq6"]
-[ext_resource type="StyleBox" uid="uid://iy32f15n8a0h" path="res://assets/styles/augment_style_panel_container.tres" id="2_a6ipw"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hkqv4"]
+bg_color = Color(0.13, 0.13, 0.13, 1)
+border_width_left = 20
+border_width_top = 20
+border_width_right = 20
+border_width_bottom = 20
+border_color = Color(0.763667, 0.79, 0, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
 
 [sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_0u7ok"]
 
@@ -16,16 +27,12 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -236.5
-offset_top = -345.0
-offset_right = 236.5
-offset_bottom = 345.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_f1cq6")
 
 [node name="PanelContainer" type="PanelContainer" parent="."]
-custom_minimum_size = Vector2(453, 670)
+custom_minimum_size = Vector2(473, 690)
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -40,7 +47,8 @@ grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
-theme_override_styles/panel = ExtResource("2_a6ipw")
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_hkqv4")
 
 [node name="MarginContainer" type="MarginContainer" parent="PanelContainer"]
 layout_mode = 2
@@ -55,12 +63,11 @@ anchor_top = 0.011
 anchor_right = 0.039
 anchor_bottom = 0.011
 offset_left = -3.454
-offset_top = -0.15
-offset_right = 2.113
+offset_top = -0.150001
+offset_right = 4.113
 offset_bottom = 325.85
 size_flags_horizontal = 0
 size_flags_vertical = 0
-theme_override_colors/font_color = Color(0.827451, 0.827451, 0.827451, 1)
 text = "Rarity"
 horizontal_alignment = 1
 autowrap_mode = 3
@@ -102,10 +109,7 @@ vertical_alignment = 1
 custom_minimum_size = Vector2(1, 1)
 layout_mode = 2
 size_flags_vertical = 3
-text = "Lorem ipsum dolor sit amet. Vel sapiente eius aut quia repellat qui numquam quibusdam et voluptas ipsam aut animi laboriosam in consequatur odio. Ea suscipit similique"
-horizontal_alignment = 1
-autowrap_mode = 3
-clip_text = true
+text = "Lorem ipsum dolor sit amet. Vel sapiente eius aut quia repellat qui numquam quibusdam et voluptas ipsam aut animi laboriosam in consequatur odio. Ea suscipit similique et corporis autem sit natus molestiae non dolo..."
 
 [node name="Spacer" type="Control" parent="PanelContainer/MarginContainer2/VBoxContainer"]
 custom_minimum_size = Vector2(0, 6)
@@ -125,7 +129,8 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="Button" type="Button" parent="."]
-custom_minimum_size = Vector2(453, 670)
+visible = false
+custom_minimum_size = Vector2(473, 690)
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -138,5 +143,5 @@ offset_right = 236.5
 offset_bottom = 345.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 theme_override_styles/normal = SubResource("StyleBoxFlat_66jg5")
-toggle_mode = true

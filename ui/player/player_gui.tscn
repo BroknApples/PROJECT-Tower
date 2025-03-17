@@ -3,7 +3,7 @@
 [ext_resource type="Theme" uid="uid://bfl1mp070y7c7" path="res://assets/themes/player_ui.tres" id="1_woru6"]
 [ext_resource type="Script" path="res://ui/player/player_gui.gd" id="2_vex1p"]
 [ext_resource type="PackedScene" uid="uid://b1uf45rws371e" path="res://ui/player/world_data.tscn" id="3_ilkql"]
-[ext_resource type="PackedScene" uid="uid://bsthnme2sfrok" path="res://ui/player/health_bar.tscn" id="3_kxx7f"]
+[ext_resource type="PackedScene" uid="uid://bsthnme2sfrok" path="res://ui/player/player_main_data.tscn" id="3_kxx7f"]
 [ext_resource type="PackedScene" uid="uid://bvdq14mgjbnue" path="res://ui/player/credits_and_cubes.tscn" id="4_03jqv"]
 [ext_resource type="PackedScene" uid="uid://dmmh2oprtxlhv" path="res://ui/player/save_data.tscn" id="6_u1qtg"]
 
@@ -25,7 +25,7 @@ metadata/_edit_use_anchors_ = true
 layout_mode = 1
 metadata/_edit_use_anchors_ = true
 
-[node name="HealthBar" parent="." instance=ExtResource("3_kxx7f")]
+[node name="PlayerMainData" parent="." instance=ExtResource("3_kxx7f")]
 layout_mode = 1
 metadata/_edit_use_anchors_ = true
 

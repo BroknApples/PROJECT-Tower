@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://ouoes86s7pk"]
 
-[ext_resource type="PackedScene" uid="uid://dbdeluccrj084" path="res://gameplay/augments/augment.tscn" id="1_3gnib"]
+[ext_resource type="PackedScene" uid="uid://ndj1rcojrm3j" path="res://gameplay/augments/augment.tscn" id="1_3gnib"]
 [ext_resource type="Script" path="res://gameplay/augments/augment_selection_screen.gd" id="1_68ic8"]
 
 [node name="AugmentSelectionScreen" type="Control"]
@@ -11,6 +11,15 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_68ic8")
+
+[node name="Panel" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_force_pass_scroll_events = false
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 layout_mode = 1
@@ -29,7 +38,7 @@ size_flags_horizontal = 4
 size_flags_vertical = 4
 
 [node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
-custom_minimum_size = Vector2(500, 670)
+custom_minimum_size = Vector2(1479, 690)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 6
@@ -53,7 +62,7 @@ theme_override_constants/margin_bottom = 20
 [node name="ConfirmSelection Button" type="Button" parent="VBoxContainer/MarginContainer"]
 custom_minimum_size = Vector2(400, 60)
 layout_mode = 2
-text = "Confrim"
+text = "Confirm"
 
 [node name="MarginContainer" type="MarginContainer" parent="."]
 layout_mode = 1
@@ -75,3 +84,4 @@ layout_mode = 2
 layout_mode = 2
 
 [connection signal="pressed" from="VBoxContainer/MarginContainer/ConfirmSelection Button" to="." method="_on_confirm_selection_button_pressed"]
+[connection signal="pressed" from="MarginContainer/OpenClose Button" to="." method="_on_open_close_button_pressed"]

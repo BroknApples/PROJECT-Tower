@@ -12,6 +12,7 @@ func _on_yes_pressed() -> void:
 
 ## If the user presses no, then close the quit menu
 func _on_no_pressed() -> void:
+	AudioManager.playStream(AudioManager.UI_CLICK1)
 	$".".visible = false
 
 

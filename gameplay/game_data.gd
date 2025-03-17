@@ -13,7 +13,7 @@ var player
 @onready var enemy_list = $Enemies
 var current_world
 
-@onready var augment_manager = $AugmentManager
+@onready var augment_manager = $CanvasLayer/AugmentManager
 
 const _SAVE_DIRECTORY = "user://game_saves/"
 var save_id = 0 # If save_id == 0, then a save file has not been loaded

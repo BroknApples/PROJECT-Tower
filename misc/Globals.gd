@@ -4,12 +4,15 @@ extends Node
 ##
 
 
-
 ## Current window size
 @onready var window_size := get_tree().get_root().get_size()
 
 ## Global Random Number Generator
 var rng = RandomNumberGenerator.new()
+
+## paused: Fully stop gameplay and gameplay helpers(mouse pointer type, etc.)
+var paused: bool
+
 
 enum Difficulty {
 	EASY,
@@ -38,6 +41,7 @@ class Pair:
 
 func _ready() -> void:
 	get_window().connect("size_changed", _on_window_size_changed)
+	paused = false
 
 
 func _on_window_size_changed():

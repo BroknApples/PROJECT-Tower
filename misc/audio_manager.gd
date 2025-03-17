@@ -7,11 +7,14 @@ extends Node
 
 
 enum AudioType {
+	UI,
 	WEAPON,
 	ENEMY,
 	CURRENCY,
 	TOTAL_AUDIO_TYPE_COUNT
 }
+
+const UI_CLICK1 = "ui_click1"
 
 ## Used to set volume of specific types of sounds
 var channels: Array[Array]
@@ -21,6 +24,12 @@ func _init() -> void:
 	# Setup Array
 	for i in range(AudioType.TOTAL_AUDIO_TYPE_COUNT):
 		channels.append([])
+
+
+func _ready() -> void:
+	# Setup streams that will always exist
+	addStream(UI_CLICK1, AudioType.UI)
+	setStreamAudio(UI_CLICK1, load("res://assets/sounds/ui_1.mp3"))
 
 
 ## Get an audio stream
@@ -45,7 +54,10 @@ func addStream(new_stream_name: String, audio_stream_type: AudioType) -> void:
 	var new_stream = AudioStreamPlayer.new()
 	new_stream.name = new_stream_name
 	
-	if (audio_stream_type == AudioType.CURRENCY):
+	# TODO: Do with settings menu at some point
+	if (audio_stream_type == AudioType.UI):
+		pass
+	elif (audio_stream_type == AudioType.CURRENCY):
 		new_stream.volume_db -= 10
 	else:
 		new_stream.volume_db -= 35

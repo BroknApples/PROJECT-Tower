@@ -7,6 +7,9 @@ extends Node
 class_name Player
 
 
+## semi_paused: Don't stop gameplay, but do stop gameplay helpers(mouse pointer type, etc.)
+var semi_paused: bool
+
 ## Target xp required for a level up, per level
 const _LEVELUP_TARGET_XP = {
 	1: 100,
@@ -17,18 +20,24 @@ const _LEVELUP_TARGET_XP = {
 	6: 950,
 	7: 1275
 }
-const _LEVEL_MAX = 8
+const _LEVEL_MAX = 7
 
 ## PlayerStats class holds stats for a player
 ## credits: Current credit count
 ## level: Current level
 ## xp: Current experience points
 class PlayerStats:
+	# Normal stats
 	var credits: float
 	var cubes: float
 	var luck: int
-	var xp: int
+	var xp: float
 	var level: int
+	
+	# Bonus stats
+	var bonus_credit_percent: float
+	var bonus_cube_percent: float
+	var bonus_xp_percent: float
 	
 	func _init(init_credits: float, init_cubes: float, init_luck: int, init_xp: int, init_level: int) -> void:
 		self.credits = init_credits
@@ -37,13 +46,14 @@ class PlayerStats:
 		self.xp = init_xp
 		self.level = init_level
 
+var AugmentEssentials = load("res://gameplay/augments/augment_essentials.gd") ## Essential functions for augments to work
 @onready var towers = $"./Towers"
+@onready var augment_manager = get_tree().get_root().get_node("Game/CanvasLayer/AugmentManager")
 var core_tower = load("res://game_objects/player/tower.tscn").instantiate()
-var player_weapon = preload("res://game_objects/player/player_weapons/laser.tscn").instantiate() # TODO: Change when more weapons are added
+var player_weapon = preload("res://game_objects/player/player_weapons/laser.tscn").instantiate() # TESTING
 var gui = preload("res://ui/player/player_gui.tscn").instantiate() ## PlayerGui Control Node
 var credits_audio_path = preload("res://assets/sounds/coin.mp3")
 var cubes_audio_path = preload("res://assets/sounds/block_drop.mp3")
-
 
 var stats: PlayerStats
 var augments: Array[Augment]
@@ -55,9 +65,12 @@ const _CUBES_AUDIO_STREAM := "Cubes"
 var current_weapon: WeaponClass
 var previous_weapon: WeaponClass
 
+
+
 func _init() -> void:
 	# TODO: Load player stats from save file
 	stats = PlayerStats.new(0, 0, 50, 0, 1)
+	semi_paused = false
 
 
 func _ready() -> void:
@@ -74,17 +87,24 @@ func _ready() -> void:
 	AudioManager.setStreamAudio(_CUBES_AUDIO_STREAM, cubes_audio_path)
 	
 	gui.setWorldNumber(120) # TESTING
+	augment_manager.rollAugments(self)
 
 
 func _process(delta: float) -> void:
-	checkAndDoUpdates()
-
-
-## Checks all child nodes for updates to hp, credits, etc.
-func checkAndDoUpdates() -> void:
 	processTowers()
 	processEnemies()
 
+
+func setSemiPausedState(state: bool) -> void:
+	if (semi_paused == state): return # No point in changing anything if it is already the desired state
+	
+	semi_paused = state
+	if (semi_paused):
+		if (!player_weapon.attack_pos_locked):
+			player_weapon.lockAttackPosition()
+	else:
+		if (player_weapon.lockAttackPosition()):
+			player_weapon.lockAttackPosition()
 
 ## Process tower updates
 func processTowers() -> void:
@@ -112,7 +132,6 @@ func processTowers() -> void:
 ## Add credits, cubes, and xp for killing an enemy
 ## enemy: Target enemies
 func processEnemies() -> void:
-	# TODO: Enemies must hold an xp value and gold value and cube value
 	while (!enemy_killed_queue.is_empty()):
 		var pair = enemy_killed_queue.pop_front()
 		var enemy = pair.first
@@ -133,41 +152,122 @@ func addEnemyKilled(enemy: Enemy, killer) -> void:
 	enemy_killed_queue.push_back(Globals.Pair.new(enemy, killer))
 
 
-# TODO: Apply credit % bonuses and Cube % bonuses to ||| addCredits() & addCubes() ||| once implemented
-
 ## Add credits to player and update UI
-func addCredits(additional_credits: int) -> void:
-	if (additional_credits == 0.0): return
-	AudioManager.playStream(_CREDITS_AUDIO_STREAM)
-	stats.credits += additional_credits
+func addCredits(additional_credits: int, play_sound := true) -> void:
+	if (additional_credits == 0): return
+	
+	if (play_sound): AudioManager.playStream(_CREDITS_AUDIO_STREAM)
+	stats.credits += additional_credits + (additional_credits * stats.bonus_credit_percent/100)
 	gui.setCredits(stats.credits)
 
 
+## Set variable that modifies the amount of credits earned per kill
+func addCreditPercent(additional_credit_percent: float) -> void:
+	if (additional_credit_percent == 0.0): return
+	stats.bonus_credit_percent += additional_credit_percent
+
+
 ## Add cubes to player and update UI
-func addCubes(additional_cubes: int) -> void:
+func addCubes(additional_cubes: int, play_sound := true) -> void:
 	if (additional_cubes == 0.0): return
-	AudioManager.playStream(_CUBES_AUDIO_STREAM)
-	stats.cubes += additional_cubes
+	
+	if (play_sound): AudioManager.playStream(_CUBES_AUDIO_STREAM)
+	stats.cubes += additional_cubes + (additional_cubes * stats.bonus_cube_percent/100)
 	gui.setCubes(stats.cubes)
+
+
+## Set variable that modifies the amount of cubes earned per kill
+func addCubePercent(additional_cube_percent: float) -> void:
+	if (additional_cube_percent == 0.0): return
+	stats.bonus_cube_percent += additional_cube_percent
+
+
+## Add luck value to player stats -> modifies the percent chances for each augment tier
+func addLuck(additional_luck: int) -> void:
+	if (additional_luck == 0): return
+	stats.luck += additional_luck
 
 
 ## Add XP to player and check for level up
 func addXp(additional_xp: int) -> void:
-	stats.xp += additional_xp
-	
-	# Already at max level, so return
+	# Level is already max, so don't waste any time
 	if (stats.level == _LEVEL_MAX): return
+	
+	stats.xp += additional_xp + (additional_xp * stats.bonus_xp_percent/100)
 	
 	# Level Up
 	if (stats.xp >= _LEVELUP_TARGET_XP[stats.level]):
 		stats.xp -= _LEVELUP_TARGET_XP[stats.level]
 		levelUp()
+	
+	# Set GUI
+	if (stats.level == _LEVEL_MAX):
+		gui.setXp(0)
+	else:
+		gui.setXp(stats.xp)
+
+
+## Set variable that modifies the amount of xp earned per kill
+func addXpPercent(additional_xp_percent: float) -> void:
+	if (additional_xp_percent == 0.0): return
+	stats.bonus_xp_percent += additional_xp_percent
 
 
 ## Level up Player and apply bonuses
 func levelUp() -> void:
-	pass # TODO: Implement
+	#stats.level += 1 TESTING: Do add a level when not testing augments
+	augment_manager.rollAugments(self)
+	gui.setXpMax(_LEVELUP_TARGET_XP[stats.level])
 
 
+## Add new augment and apply the new augment
 func addAugment(new_augment: Augment) -> void:
+	# Add augment
 	augments.push_back(new_augment)
+	print("Displaying augments for player:")
+	for augment in augments:
+		print(augment.augment_name)
+	
+	# Now apply the augment
+	for pair in new_augment.stats:
+		var stat_type = pair.first
+		var value = pair.second
+		match(stat_type): # Match StatType
+			AugmentEssentials.StatType.PLAYER_CREDITS:
+				addCredits(value, false)
+			AugmentEssentials.StatType.PLAYER_CREDITS_PERCENT:
+				addCreditPercent(value)
+			AugmentEssentials.StatType.PLAYER_CUBES:
+				addCubes(value, false)
+			AugmentEssentials.StatType.PLAYER_CUBES_PERCENT:
+				addCubePercent(value)
+			AugmentEssentials.StatType.PLAYER_LUCK:	
+				addLuck(value)
+			AugmentEssentials.StatType.PLAYER_XP_PERCENT:
+				addXpPercent(value)
+			AugmentEssentials.StatType.PLAYER_LEVEL:
+				for i in range(0, value): levelUp()
+			AugmentEssentials.StatType.TOWER_BASE_MAX_HP:
+				core_tower.addBonusBaseMaxHp(value)
+			AugmentEssentials.StatType.TOWER_BASE_MAX_HP_PERCENT:
+				core_tower.addBonusBaseMaxHpPercent(value)
+			AugmentEssentials.StatType.TOWER_BASE_ARMOR:
+				core_tower.addBonusBaseArmor(value) 
+			AugmentEssentials.StatType.TOWER_BASE_ARMOR_PERCENT:
+				core_tower.addBonusBaseArmorPercent(value) 
+			AugmentEssentials.StatType.TOWER_BASE_HP_REGEN:
+				core_tower.addBonusBaseHpRegen(value)
+			AugmentEssentials.StatType.TOWER_BASE_HP_REGEN_PERCENT:
+				core_tower.addBonusBaseHpRegenPercent(value)
+			AugmentEssentials.StatType.TOWER_MAX_HP:
+				core_tower.addBonusMaxHp(value)
+			AugmentEssentials.StatType.TOWER_MAX_HP_PERCENT:
+				core_tower.addBonusMaxHpPercent(value)
+			AugmentEssentials.StatType.TOWER_ARMOR:
+				core_tower.addBonusArmor(value)
+			AugmentEssentials.StatType.TOWER_ARMOR_PERCENT:
+				core_tower.addBonusArmorPercent(value)
+			AugmentEssentials.StatType.TOWER_HP_REGEN:
+				core_tower.addBonusHpRegen(value) 
+			AugmentEssentials.StatType.TOWER_HP_REGEN_PERCENT:
+				core_tower.addBonusHpRegenPercent(value)
