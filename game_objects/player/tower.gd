@@ -132,7 +132,7 @@ func setStatBonuses() -> void:
 
 ## Tower Has collided with an enemy's attack, reduce current HP
 ## attacker: Who did the tower collide with
-func takeDamage(attacker: Enemy):
+func takeDamageFromEnemy(attacker: Enemy):
 	print("Tower with id: " + str(tower_id) + " took damage from EnemyType: '" + attacker.enemy_type + "'")
 	stats.curr_hp -= (attacker.stats.damage * 100 / (100 + stats.armor))
 	if (parent.has_method("takeDamage")):

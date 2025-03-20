@@ -30,6 +30,15 @@ enum EnemyTags {
 	STAGGER
 }
 
+## Meta tags for nodes to differentiate between types
+enum Metadata {
+	ENEMY
+}
+
+const MetadataStrings = {
+	Metadata.ENEMY: "Enemy"
+}
+
 ## Pair type
 class Pair:
 	var first
@@ -69,7 +78,7 @@ func setCursorShape(new_cursor_shape: CompressedTexture2D, new_cursor_type = Inp
 ## Get what physics node exists at some given position
 ## pos: where on the screen to check
 ## returns: the top level node or null
-func getPhysicsNodeAtPosition(pos: Vector2):
+func getPhysicsNodeAtPosition(pos: Vector2) -> PhysicsBody2D:
 	var space_state = get_tree().get_root().get_node("Game").get_world_2d().direct_space_state
 	var query = PhysicsPointQueryParameters2D.new()
 	query.position = pos
@@ -85,21 +94,32 @@ func getPhysicsNodeAtPosition(pos: Vector2):
 	return null
 
 
-## 
-func getPhysicsNodesInArea(pos: Vector2):
+## Get what physics node exists at some given position and shape to check in
+## pos: where on the screen to check
+## shape: shape to check objects in
+## returns: the top level node or null
+func getPhysicsNodesInArea(pos: Vector2, shape: Shape2D) -> Array[PhysicsBody2D]:
 	var space_state = get_tree().get_root().get_node("Game").get_world_2d().direct_space_state
 	var query = PhysicsShapeQueryParameters2D.new()
-	query.position = pos
+	query.transform = Transform2D(0, pos)
+	query.shape = shape
 	query.collide_with_bodies = true  # Enable detection of physics bodies
 	query.collide_with_areas = false  # Disable area detection (optional)
-	var result = space_state.intersect_point(query, 1)  # Limit to 1 result
+	var results = space_state.intersect_shape(query, 100)  # Limit to 100 nodes
 	
-	if result.size() > 0:
-		var node = result[0]["collider"]
-		return node
+	var nodes: Array[PhysicsBody2D] = []
+	for result in results:
+		var node = result["collider"]
+		if (node is PhysicsBody2D):
+			nodes.append(node)
 	
-	# Return null if no physics nodes found
-	return null
+	return nodes
+
+
+## Get the list of players in the game
+func getPlayers() -> Array[Node]:
+	return get_parent().get_parent().get_node("Players").get_children()
+
 
 ## Quit the game
 func quitGame():

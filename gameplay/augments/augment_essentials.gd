@@ -7,7 +7,6 @@ extends Node
 ## Rarity enum
 ## How common it to draw an augment
 enum Rarity {
-	EVOLUTION,
 	LEGENDARY,
 	EPIC,
 	RARE,
@@ -18,8 +17,6 @@ enum Rarity {
 ## Get a string from a rarity type
 func rarityToString(rarity: Rarity) -> String:
 	match(rarity):
-		Rarity.EVOLUTION:
-			return "Evolution"
 		Rarity.LEGENDARY:
 			return "Legendary"
 		Rarity.EPIC:
@@ -35,7 +32,6 @@ func rarityToString(rarity: Rarity) -> String:
 
 ## Get the color of the main elements of an augment given the rarity
 func rarityToColor(rarity: Rarity) -> Color:
-	const EVOLUTION_COLOR = Color("#add4db")
 	const LEGENDARY_COLOR = Color("#fcd10f")
 	const EPIC_COLOR = Color("#5f00a0")
 	const RARE_COLOR = Color("#2c2cff")
@@ -43,7 +39,6 @@ func rarityToColor(rarity: Rarity) -> Color:
 	const COMMON_COLOR = Color("#d3d3d3")
 	
 	match(rarity):
-		Rarity.EVOLUTION:	return EVOLUTION_COLOR
 		Rarity.LEGENDARY:	return LEGENDARY_COLOR
 		Rarity.EPIC:		return EPIC_COLOR
 		Rarity.RARE:		return RARE_COLOR
@@ -61,13 +56,6 @@ enum Classifier {
 	TOWER_WEAPON,
 	PLAYER_WEAPON,
 	MISC
-}
-
-
-## EvolutionCondition enum
-## Conditions for an evolution rarity augment to upgrade itself
-enum EvolutionCondition {
-	NONE
 }
 
 

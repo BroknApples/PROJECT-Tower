@@ -7,19 +7,8 @@ extends Node
 var aug_queue: Array ## If there is already an augment selection screen, add the new one to a queue
 const AugmentEssentials = preload("res://gameplay/augments/augment_essentials.gd")
 
-## Default chance to roll a given rarity
-const _DEFAULT_CHANCES = {
-	AugmentEssentials.Rarity.EVOLUTION: 0.02, # More common than a legendary, but it takes way more effort to make it a legendary-valued augment
-	AugmentEssentials.Rarity.LEGENDARY: 0.01,
-	AugmentEssentials.Rarity.EPIC: 0.05,
-	AugmentEssentials.Rarity.RARE: 0.12,
-	AugmentEssentials.Rarity.UNCOMMON: 0.20,
-	AugmentEssentials.Rarity.COMMON: 0.60
-}
-
 ## Augment Lists
 var all_augments: Array[Augment]
-var evolution_augments: Array[Augment]
 var legendary_augments: Array[Augment]
 var epic_augments: Array[Augment]
 var rare_augments: Array[Augment]
@@ -31,6 +20,8 @@ func _ready() -> void:
 	_setupAugmentLists("res://gameplay/augments/augment_list/")
 	# TESTING
 	#var chances2 = []
+	#var chance3 = [0, 25, 50, 100, 150, 200, 250, 300]
+	#chances2.push_back(_getChances(0))
 	#chances2.push_back(_getChances(25))
 	#chances2.push_back(_getChances(50))
 	#chances2.push_back(_getChances(100))
@@ -40,8 +31,10 @@ func _ready() -> void:
 	#chances2.push_back(_getChances(300))
 	#
 	#print("TESTCHANCES NEW ENTIRE BATCH")
+	#var i = 0
 	#for a in chances2:
-		#print("TESTCHANCES\n")
+		#print("TESTCHANCES " + str(chance3[i]) + "\n")
+		#i += 1
 		#var c = 0
 		#for j in a:
 			#print("TESTCHANCES: " + str(c + 1) + ": " + str(AugmentEssentials.new().rarityToString(c) + " ->   " + str(a[j])))
@@ -81,10 +74,6 @@ func _setupAugmentLists(directory_path: String) -> void:
 		var instance = load(full_path).new()  # Temporarily instantiate this augment
 		
 		all_augments.push_back(instance.duplicate()) # All Augments
-		if (instance.setEvolutionRarity()): 				# Evolution augments
-			var rarity_aug = instance.duplicate()
-			rarity_aug.setEvolutionRarity()
-			evolution_augments.push_back(rarity_aug)
 		
 		if (instance.setLegendaryRarity()): 				# Legendary augments
 			var rarity_aug = instance.duplicate()
@@ -159,51 +148,58 @@ func rollAugments(player: Player, type_classifiers: Array[AugmentEssentials.Clas
 
 ## Get the chances to roll any given augment rarity
 func _getChances(luck: int) -> Dictionary:
-	# TODO: Fix luck based rarities
-	#const EVOLUTION_SCALER = 
-	#const LEGENDARY_SCALER = 
-	#const EPIC_SCALER = 
-	#const RARE_SCALER = 
-	#const UNCOMMON_SCALER =
-	#const COMMON_SCALER =
-	
 	clamp(luck, 0, 300) # Max luck is 300
+	var luck_factor: float = luck / 300.0
 	
-	var chances = _DEFAULT_CHANCES.duplicate()
+	# Chance ranges
+	const LEGENDARY_INITIAL := 0.01
+	const EPIC_INITIAL := 0.05
+	const RARE_INITIAL := 0.12
+	const UNCOMMON_INITIAL := 0.22
+	const COMMON_INITIAL := 0.60
 	
-	var evolution_chance = _DEFAULT_CHANCES[AugmentEssentials.Rarity.EVOLUTION]
-	var legendary_chance = _DEFAULT_CHANCES[AugmentEssentials.Rarity.LEGENDARY]
-	var epic_chance = _DEFAULT_CHANCES[AugmentEssentials.Rarity.EPIC]
-	var rare_chance = _DEFAULT_CHANCES[AugmentEssentials.Rarity.RARE]
-	var uncommon_chance = _DEFAULT_CHANCES[AugmentEssentials.Rarity.UNCOMMON]
-	var common_chance = _DEFAULT_CHANCES[AugmentEssentials.Rarity.COMMON]
+	const RARE_MIDPOINT := 0.27
+	const RARE_LUCK_MIDPOINT := 180.0 ## Luck value needed to chance distribution method
+	const UNCOMMON_MIDPOINT := 0.35
+	const UNCOMMON_LUCK_MIDPOINT := 130.0 ## Luck value needed to chance distribution method
+	
+	const LEGENDARY_FINAL := 0.15
+	const EPIC_FINAL:= 0.24
+	const RARE_FINAL := 0.34
+	const UNCOMMON_FINAL := 0.20
+	const COMMON_FINAL := 0.12
+	
+	# Calculate chances with some given distributions
+	var legendary_chance := lerpf(LEGENDARY_INITIAL, LEGENDARY_FINAL, ease(luck_factor, 2.6))
+	var epic_chance := lerpf(EPIC_INITIAL, EPIC_FINAL, ease(luck_factor, -1.8))
+	var rare_chance := lerpf(RARE_INITIAL, RARE_MIDPOINT, ease(luck/RARE_LUCK_MIDPOINT, -2.4)) if luck < RARE_LUCK_MIDPOINT else lerpf(RARE_MIDPOINT, RARE_FINAL, ease(luck_factor, 1.8))
+	var uncommon_chance := lerpf(UNCOMMON_INITIAL, UNCOMMON_MIDPOINT, ease(luck/UNCOMMON_LUCK_MIDPOINT, -1.4)) if luck < UNCOMMON_LUCK_MIDPOINT else lerpf(UNCOMMON_MIDPOINT, UNCOMMON_FINAL, ease(luck_factor, 0.8))
+	var common_chance := lerpf(COMMON_INITIAL, COMMON_FINAL, ease(luck_factor, 0.4))
 	
 	# Normalize values to keep between 0 and 1
-	var total_chance = evolution_chance + legendary_chance + epic_chance + rare_chance + uncommon_chance + common_chance
-	evolution_chance /= total_chance
-	legendary_chance /= total_chance
-	epic_chance /= total_chance
-	rare_chance /= total_chance
-	uncommon_chance /= total_chance
-	common_chance /= total_chance
+	var total_chance = legendary_chance + epic_chance + rare_chance + uncommon_chance + common_chance
+	if total_chance > 0:
+		legendary_chance /= total_chance
+		epic_chance /= total_chance
+		rare_chance /= total_chance
+		uncommon_chance /= total_chance
+		common_chance /= total_chance
+	else:
+		print("ERROR: Sum of augment chances is not a positive float.")
 	
-	# Set values
-	chances[AugmentEssentials.Rarity.EVOLUTION] = evolution_chance
-	chances[AugmentEssentials.Rarity.LEGENDARY] = legendary_chance
-	chances[AugmentEssentials.Rarity.EPIC] = epic_chance
-	chances[AugmentEssentials.Rarity.RARE] = rare_chance
-	chances[AugmentEssentials.Rarity.UNCOMMON] = uncommon_chance
-	chances[AugmentEssentials.Rarity.COMMON] = common_chance
-	
-	return chances
+	return {
+		AugmentEssentials.Rarity.LEGENDARY: legendary_chance,
+		AugmentEssentials.Rarity.EPIC: epic_chance,
+		AugmentEssentials.Rarity.RARE: rare_chance,
+		AugmentEssentials.Rarity.UNCOMMON: uncommon_chance,
+		AugmentEssentials.Rarity.COMMON: common_chance
+	}
 
 
 func _getAugmentOfRarity(rarity: AugmentEssentials.Rarity) -> Augment:
 	var rand_aug = func(array: Array[Augment]): return array[Globals.rng.randi_range(0, array.size() - 1)]
 	
 	match rarity:
-		AugmentEssentials.Rarity.EVOLUTION:
-			return rand_aug.call(evolution_augments)
 		AugmentEssentials.Rarity.LEGENDARY:
 			return rand_aug.call(legendary_augments)
 		AugmentEssentials.Rarity.EPIC:

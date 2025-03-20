@@ -38,6 +38,7 @@ class WeaponStats:
 			   init_base_crit_chance: float, init_base_crit_damage: float,
 			   init_base_weapon_range: int) -> void:
 		setBaseStats(init_base_damage, init_base_attack_speed, init_base_crit_chance, init_base_crit_damage, init_base_weapon_range)
+		setMainStats(init_base_damage, init_base_attack_speed, init_base_crit_chance, init_base_crit_damage, init_base_weapon_range)
 	
 	
 	## Set base stats of weapon
@@ -69,8 +70,10 @@ class WeaponAudio:
 	func _init(init_main_attack_sfx: AudioStream) -> void:
 		main_attack_sfx = init_main_attack_sfx
 
+## Used to draw 2D elements on the scene
+var canvas_layer: CanvasLayer 
 
-# Who owns this weapon
+## Who owns this weapon
 var player_owner: Player
 
 # Member variables
@@ -95,6 +98,10 @@ func _init(init_weapon_name: String, init_audio: WeaponAudio, init_weapon_stats:
 
 
 func _ready() -> void:
+	## Setup the canvas layer
+	canvas_layer = CanvasLayer.new()
+	add_child(canvas_layer)
+	
 	AudioManager.addStream(weapon_name, AudioManager.AudioType.WEAPON)
 
 
@@ -105,14 +112,12 @@ func _process(delta: float) -> void:
 ## Increase attack timer and check for attacks
 func increaseAtkTimer(time_passed: float) -> void:
 	attack_timer += time_passed;
-	
 	var time_threshold = 1.0 / stats.attack_speed
+	clamp(attack_timer, 0.0, time_threshold)
+	
 	if (attack_timer >= time_threshold):
-		# attack_timer -= time_threshold
-		attack_timer = 0.0
-		var attack_pos = findAttackPosition()
-		print("Weapon '" + weapon_name + "' is attacking at: (" + str(attack_pos.x) + ", " + str(attack_pos.y) + ")")
-		doAttack(findAttackPosition())
+		if (doAttack(findAttackPosition())):
+			attack_timer = 0.0
 
 
 ## Add stat bonuses based on upgrades
@@ -122,8 +127,8 @@ func applyStatBonuses() -> void:
 
 ## VIRTUAL Method
 ## Do an attack
-func doAttack(attack_pos: Vector2) -> void:
-	pass
+func doAttack(attack_pos: Vector2) -> bool:
+	return false
 
 
 ## Calculate damage with crit chance and stuff

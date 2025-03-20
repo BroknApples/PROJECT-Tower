@@ -11,7 +11,6 @@ const _DEFAULT_ATTACK_POS = Vector2(100, 100)
 var cursor_shape: CompressedTexture2D
 var cursor_hotspot: Vector2
 var attack_pos_locked: bool
-var canvas_layer: CanvasLayer
 var attack_locked_texture_rect: TextureRect ## Draw this item only when attack position is locked
 var attack_pos: Vector2
 
@@ -31,11 +30,8 @@ func _ready() -> void:
 	
 	#
 	# Setup attack lock texture rect
-	# Uses a canvas layer
+	# Uses the canvas layer
 	#
-	
-	canvas_layer = CanvasLayer.new()
-	add_child(canvas_layer)
 	
 	attack_locked_texture_rect = TextureRect.new()
 	attack_locked_texture_rect.texture = cursor_shape

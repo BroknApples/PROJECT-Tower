@@ -8,7 +8,10 @@ class_name Enemy
 
 
 ## EnemyStats Class
-## enemy_type: Name of the enemy type
+## personality: Personality type of the enemy
+## credit_value: How many credits are awarded on death
+## cube_value: How many cubes are awarded on death
+## xp_value: How much xp is awarded on death
 ## max_hp: Maximum health of the enemy
 ## curr_hp: Current health of the enemy
 ## damage: How much damage does it do to player objects
@@ -48,19 +51,20 @@ class EnemyStats:
 
 @onready var enemy_rigid_body = $RigidBody2D
 
-var enemy_type: String ## Always initialized in child class init function
+var enemy_name: String ## Name of the enemy
 var stats: EnemyStats # Stats
 var dmg_tag: WeaponClass ## What last damaged this enemy
 
 
 ## Set stats and tags for the enemy
-func _init(init_enemy_type: String, init_enemy_stats: EnemyStats) -> void:
-	enemy_type = init_enemy_type
+func _init(init_enemy_name: String, init_enemy_stats: EnemyStats) -> void:
+	enemy_name = init_enemy_name
 	stats = init_enemy_stats
 	stats.setPersonality(EnemyTypes.PersonalityType.new()) # Set empty personality by default
 
 
 func _ready() -> void:
+	self.set_meta(Globals.MetadataStrings[Globals.Metadata.ENEMY], true)
 	findSpawnPosition()
 	
 	# Set contact monitoring to true
@@ -96,7 +100,7 @@ func _on_rigid_body_2d_body_entered(body: Node) -> void:
 ## Check if enemy has died
 func checkDeath() -> void:
 	if (stats.curr_hp <= 0.0):
-		print("EnemyType '" + enemy_type + "' has died.")
+		print("Enemy '" + enemy_name + "' has died.")
 		dmg_tag.getOwner().addCredits(stats.credit_value)
 		dmg_tag.getOwner().addCubes(stats.cube_value)
 		dmg_tag.getOwner().addXp(stats.xp_value)
@@ -137,7 +141,7 @@ func findSpawnPosition() -> void:
 
 ## Find the nearest object to attack
 func findNearestAttackable() -> Vector2:
-	var players = get_parent().get_parent().get_node("Players").get_children()
+	var players = Globals.getPlayers()
 
 	var closest_tower_pos = Vector2(INF, INF)
 	
@@ -167,9 +171,10 @@ func defaultPhysicsProcess(delta: float):
 
 ## Removes some hp from the node
 func takeDamage(tagger: Node, damage: float) -> void:
-	print("EnemyType '" + enemy_type + "' took " + str(damage) + " damage")
+	print("Enemy '" + enemy_name + "' took " + str(damage) + " damage")
 	stats.curr_hp -= damage
 	dmg_tag = tagger
+
 
 ## VIRTUAL FUNCTION
 ## Modify in child types and do special interactions on collisions like

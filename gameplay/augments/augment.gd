@@ -23,11 +23,6 @@ var rarity: AugmentEssentials.Rarity ## How common is this augment
 var classifiers: Array[AugmentEssentials.Classifier] ## What type of objects can this augment be applied to
 
 
-## If this is null, then it is NOT an evolution augment
-## Each index corresponds to a rarity ( TODO: May change to dictionary later )
-var evolution_conditions: Array[Array]
-
-
 func _init() -> void:
 	augment_name = "Blank Augment"
 	description = "Placeholder augment used as the base of all augment classes."
@@ -67,8 +62,6 @@ func copy(augment: Augment) -> void:
 	self.icon = augment.icon
 	self.rarity = augment.rarity
 	self.classifiers = augment.classifiers
-	
-	self.evolution_conditions = augment.evolution_conditions
 
 
 func _statsToLabel() -> String:
@@ -99,22 +92,6 @@ func _statsToLabel() -> String:
 	
 	return label
 
-## Set the augment to a common rarity
-## returns: True if the rarity exists, False if the rarity does not exist
-func setEvolutionRarity() -> bool:
-	rarity = AugmentEssentials.Rarity.EVOLUTION
-	augment_name = AugmentEssentials.new().rarityToString(rarity) + " " + augment_name
-	
-	evolution_conditions = [
-		[AugmentEssentials.EvolutionCondition.NONE], # Common
-		[AugmentEssentials.EvolutionCondition.NONE], # Uncommon
-		[AugmentEssentials.EvolutionCondition.NONE], # Rare
-		[AugmentEssentials.EvolutionCondition.NONE], # Epic
-		[AugmentEssentials.EvolutionCondition.NONE]  # Legendary
-	]
-	
-	return false
-
 
 ## Set the augment to a legendary rarity
 ## returns: True if the rarity exists, False if the rarity does not exist
@@ -143,7 +120,7 @@ func setRareRarity() -> bool:
 	return false
 
 
-## Set the augment to a uncommon rarity
+## Set the augment to an uncommon rarity
 ## returns: True if the rarity exists, False if the rarity does not exist
 func setUncommonRarity() -> bool:
 	rarity = AugmentEssentials.Rarity.UNCOMMON
@@ -180,28 +157,6 @@ func setCommonRarity() -> bool:
 	#description = "Instantly obtain credits"
 	#icon = PlaceholderTexture2D.new() # TODO: Add texture
 	#classifiers = [AugmentEssentials.Classifier.PLAYER]
-#
-#
-### Set the augment to a common rarity
-### returns: True if the rarity exists, False if the rarity does not exist
-#func setEvolutionRarity() -> bool:
-	#super.setEvolutionRarity()
-	#
-	#evolution_conditions = [
-		#[AugmentEssentials.EvolutionCondition.NONE], # Common
-		#[AugmentEssentials.EvolutionCondition.NONE], # Uncommon
-		#[AugmentEssentials.EvolutionCondition.NONE], # Rare
-		#[AugmentEssentials.EvolutionCondition.NONE], # Epic
-		#[AugmentEssentials.EvolutionCondition.NONE]  # Legendary
-	#]
-	#
-	## TODO: Implement evolution types later
-	## Globals.Pair.new(AugmentEssentials.StatType, value: int, float, etc)
-	#stats = [
-		
-	#]
-	#
-	#return true
 #
 #
 ### Set the augment to a legendary rarity
@@ -243,7 +198,7 @@ func setCommonRarity() -> bool:
 	#return true
 #
 #
-### Set the augment to a uncommon rarity
+### Set the augment to an uncommon rarity
 ### returns: True if the rarity exists, False if the rarity does not exist
 #func setUncommonRarity() -> bool:
 	#super.setUncommonRarity()

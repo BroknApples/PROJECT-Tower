@@ -69,7 +69,7 @@ var previous_weapon: WeaponClass
 
 func _init() -> void:
 	# TODO: Load player stats from save file
-	stats = PlayerStats.new(0, 0, 50, 0, 1)
+	stats = PlayerStats.new(0, 0, 25, 0, 1)
 	semi_paused = false
 
 
